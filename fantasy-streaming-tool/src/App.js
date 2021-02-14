@@ -1,5 +1,4 @@
 import './App.css';
-import SplashPage from './SplashPage'
 
 import firebase from 'firebase/app'
 import 'firebase/firestore';
@@ -11,6 +10,7 @@ import { useCollectionData } from 'react-firebase-hooks/firestore'
 const axios = require("axios");
 const qs = require("qs");
 const config = require('./conf.js');
+const parser_xml = require('parse-json')
 const AUTH_ENDPOINT= "https://api.login.yahoo.com/oauth2/get_token"
 const AUTH_HEADER = Buffer.from(`${config.CONSUMER_KEY}:${config.CONSUMER_SECRET}`).toString(`base64`);
 const REQUEST_AUTH = "https://api.login.yahoo.com/oauth2/request_auth"
@@ -45,7 +45,7 @@ function App() {
 
       </header>
       <section>
-        {user ? <MainPage /> : <SignIn />}
+        {<SignIn />}
       </section>
     </div>
   );
@@ -59,6 +59,14 @@ function MainPage() {
   )
 }
 
+function Data(data) {
+  return (
+  <h1 className="data">
+    {data}
+  </h1>
+  )
+}
+
 
 function SignIn() {
   const signInWithYahoo = () => {
@@ -68,6 +76,9 @@ function SignIn() {
       language: 'en'
     });
     provider.addScope('fspt-w');
+    provider.addScope('profile')
+    provider.addScope('email')
+    provider.addScope('openid')
     firebase.auth().signInWithPopup(provider)
     .then((result) => {
         /** @type {firebase.auth.OAuthCredential} */
@@ -76,7 +87,7 @@ function SignIn() {
         // Yahoo OAuth access token and ID token can be retrieved by calling:
         var accessToken = credential.accessToken;
         var idToken = credential.idToken;
-        authorizeAcess();
+        const resp = makeAPIrequest('https://fantasysports.yahooapis.com/fantasy/v2/team/402.l.21869.t.7/roster/players',accessToken);
     })
     .catch((error) => {
         // Handle error.
@@ -84,28 +95,33 @@ function SignIn() {
 
 
   }
-  function authorizeAcess() {
-    return axios({
-      url: REQUEST_AUTH,
-      method: "get",
-      headers: {
-        Authorization: `Basic ${AUTH_HEADER}`,
-        "Content-Type": "application/x-www-form-urlencoded",
-        "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/72.0.3626.109 Safari/537.36",
-      },
-      data: qs.stringify({
-        client_id: config.CONSUMER_KEY,
-        redirect_uri: "https://fantasy-streaming-tool.firebaseapp.com/auth",
-        response_type: "code",
-        language: "en-us"
-      }),
-    }).catch((err) => {
-      console.error(`Error in authorizeAcess(): ${err}`);
-    }).then((res) =>
-    {
-      setTimeout(100000)
-      console.log(res)
-    })
+  async function makeAPIrequest(url, access_token) {
+    let response;
+    try {
+      response = await axios({
+        url,
+        method: "get",
+        headers: {
+          Authorization: `Bearer ${access_token}`,
+          "Content-Type": "application/x-www-form-urlencoded",
+          "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/72.0.3626.109 Safari/537.36",
+        },
+      });
+      const jsonData = JSON.parse(parser_xml.toJson(response.data));
+      return jsonData
+    } catch (err) {
+      // if (err.response.data && err.response.data.error && err.response.data.error.description && err.response.data.error.description.includes("token_expired")) {
+        // const newToken = await refreshAuthorizationToken(auth.refresh_token);
+      //   if (newToken && newToken.data && newToken.data.access_token) {
+      //     // this.CREDENTIALS = newToken.data;
+      //     writeToFile(JSON.stringify(newToken.data), AUTH_FILE, "w");
+      //     return makeAPIrequest(url, newToken.data.access_token, newToken.data.refresh_token);
+      //   }
+      // } else {
+      //   console.error(`Error with credentials in makeAPIrequest()/refreshAuthorizationToken(): ${err}`);
+      // }
+      return err;
+    }
   }
   
   return (
@@ -118,6 +134,7 @@ function SignIn() {
         <button onClick={signInWithYahoo}>Sign in with Yahoo</button>
       </div>
     </div>
+
   )
 }
 
@@ -130,3 +147,4 @@ function SignOut() {
 
 
 export default App;
+

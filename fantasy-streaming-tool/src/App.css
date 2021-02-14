@@ -101,3 +101,9 @@ h1 {
   line-height: .75;
   margin: 10px 0;
 }
+
+.data {
+  color: white;
+  justify-content: center;
+
+}
