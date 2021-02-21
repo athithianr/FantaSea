@@ -107,3 +107,11 @@ h1 {
   justify-content: center;
 
 }
+
+.signOutButton {
+  position: absolute;
+  width: 100%;
+  display: flex;
+  justify-content: center; 
+  bottom: 10px; 
+}
