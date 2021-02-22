@@ -4,15 +4,6 @@ const axios = require('axios')
 const config = require('./conf')
 
 const SignIn = () => {
-    async function makeRequest() {
-        axios.get('http://localhost:5000/makeRequest')
-            .then(res => {
-
-                console.log(res)
-
-            })
-
-    }
     const signInWithYahoo = () => {
         const provider = new firebase.auth.OAuthProvider('yahoo.com')
         provider.setCustomParameters({

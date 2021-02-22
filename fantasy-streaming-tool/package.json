@@ -13,6 +13,7 @@
     "nodemon": "^2.0.7",
     "parser": "^0.1.4",
     "react": "^17.0.1",
+    "react-bones": "^1.0.3",
     "react-dom": "^17.0.1",
     "react-firebase-hooks": "^2.2.0",
     "react-scripts": "4.0.2",
