@@ -2,22 +2,13 @@ import 'firebase/auth';
 import './App.css';
 
 import LeagueMenu from './LeagueMenu'
+import NavBar from './NavBar'
 
-
-
-const SignOut = (props) => {
-    const auth = props.auth
-    return auth.currentUser && (
-        <div className="signOutButton">
-            <button onClick={() => auth.signOut()}>Sign out</button>
-        </div>
-    )
-}
 const MainPage = (props) => {
     return (
         <div className="main-page">
+            <NavBar auth={props.auth}></NavBar>
             <LeagueMenu></LeagueMenu>
-            <SignOut auth={props.auth} />
         </div>
 
     );

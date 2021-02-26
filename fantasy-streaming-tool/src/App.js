@@ -35,9 +35,7 @@ function App() {
     <div className="App">
       <header className="App-header">
       </header>
-      <section>
         {user ? <MainPage auth={auth}/> : <SignIn />}
-      </section>
     </div>
   );
 }
