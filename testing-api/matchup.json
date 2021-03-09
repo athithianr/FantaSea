@@ -1,0 +1,696 @@
+{
+    "fantasy_content": {
+        "$": {
+            "xml:lang": "en-US",
+            "yahoo:uri": "http://fantasysports.yahooapis.com/fantasy/v2/team/402.l.21869.t.7/matchups;weeks=11",
+            "time": "105.74412345886ms",
+            "copyright": "Data provided by Yahoo! and STATS, LLC",
+            "refresh_rate": "60",
+            "xmlns:yahoo": "http://www.yahooapis.com/v1/base.rng",
+            "xmlns": "http://fantasysports.yahooapis.com/fantasy/v2/base.rng"
+        },
+        "team": [
+            {
+                "team_key": [
+                    "402.l.21869.t.7"
+                ],
+                "team_id": [
+                    "7"
+                ],
+                "name": [
+                    "luka blyat"
+                ],
+                "is_owned_by_current_login": [
+                    "1"
+                ],
+                "url": [
+                    "https://basketball.fantasysports.yahoo.com/nba/21869/7"
+                ],
+                "team_logos": [
+                    {
+                        "team_logo": [
+                            {
+                                "size": [
+                                    "large"
+                                ],
+                                "url": [
+                                    "https://yahoofantasysports-res.cloudinary.com/image/upload/t_s192sq/fantasy-logos/dc9e55645a69a70515a0f19b953275de13699d3a8d3d9b7389bff5a8c854c1da.jpg"
+                                ]
+                            }
+                        ]
+                    }
+                ],
+                "waiver_priority": [
+                    "2"
+                ],
+                "number_of_moves": [
+                    "39"
+                ],
+                "number_of_trades": [
+                    "1"
+                ],
+                "roster_adds": [
+                    {
+                        "coverage_type": [
+                            "week"
+                        ],
+                        "coverage_value": [
+                            "11"
+                        ],
+                        "value": [
+                            "3"
+                        ]
+                    }
+                ],
+                "league_scoring_type": [
+                    "head"
+                ],
+                "has_draft_grade": [
+                    "0"
+                ],
+                "auction_budget_total": [
+                    "200"
+                ],
+                "auction_budget_spent": [
+                    "200"
+                ],
+                "managers": [
+                    {
+                        "manager": [
+                            {
+                                "manager_id": [
+                                    "7"
+                                ],
+                                "nickname": [
+                                    "Athi"
+                                ],
+                                "guid": [
+                                    "6GKUF7T6OUWZB3OPZH5ABYTCOU"
+                                ],
+                                "is_current_login": [
+                                    "1"
+                                ],
+                                "email": [
+                                    "athiphenom23@yahoo.ca"
+                                ],
+                                "image_url": [
+                                    "https://s.yimg.com/ag/images/default_user_profile_pic_64sq.jpg"
+                                ],
+                                "felo_score": [
+                                    "800"
+                                ],
+                                "felo_tier": [
+                                    "platinum"
+                                ]
+                            }
+                        ]
+                    }
+                ],
+                "matchups": [
+                    {
+                        "$": {
+                            "count": "1"
+                        },
+                        "matchup": [
+                            {
+                                "week": [
+                                    "11"
+                                ],
+                                "week_start": [
+                                    "2021-03-01"
+                                ],
+                                "week_end": [
+                                    "2021-03-14"
+                                ],
+                                "status": [
+                                    "midevent"
+                                ],
+                                "is_playoffs": [
+                                    "0"
+                                ],
+                                "is_consolation": [
+                                    "0"
+                                ],
+                                "stat_winners": [
+                                    {
+                                        "stat_winner": [
+                                            {
+                                                "stat_id": [
+                                                    "5"
+                                                ],
+                                                "winner_team_key": [
+                                                    "402.l.21869.t.6"
+                                                ]
+                                            },
+                                            {
+                                                "stat_id": [
+                                                    "8"
+                                                ],
+                                                "winner_team_key": [
+                                                    "402.l.21869.t.6"
+                                                ]
+                                            },
+                                            {
+                                                "stat_id": [
+                                                    "10"
+                                                ],
+                                                "winner_team_key": [
+                                                    "402.l.21869.t.6"
+                                                ]
+                                            },
+                                            {
+                                                "stat_id": [
+                                                    "12"
+                                                ],
+                                                "winner_team_key": [
+                                                    "402.l.21869.t.6"
+                                                ]
+                                            },
+                                            {
+                                                "stat_id": [
+                                                    "15"
+                                                ],
+                                                "winner_team_key": [
+                                                    "402.l.21869.t.6"
+                                                ]
+                                            },
+                                            {
+                                                "stat_id": [
+                                                    "16"
+                                                ],
+                                                "winner_team_key": [
+                                                    "402.l.21869.t.6"
+                                                ]
+                                            },
+                                            {
+                                                "stat_id": [
+                                                    "17"
+                                                ],
+                                                "winner_team_key": [
+                                                    "402.l.21869.t.6"
+                                                ]
+                                            },
+                                            {
+                                                "stat_id": [
+                                                    "18"
+                                                ],
+                                                "winner_team_key": [
+                                                    "402.l.21869.t.6"
+                                                ]
+                                            },
+                                            {
+                                                "stat_id": [
+                                                    "19"
+                                                ],
+                                                "winner_team_key": [
+                                                    "402.l.21869.t.6"
+                                                ]
+                                            }
+                                        ]
+                                    }
+                                ],
+                                "teams": [
+                                    {
+                                        "$": {
+                                            "count": "2"
+                                        },
+                                        "team": [
+                                            {
+                                                "team_key": [
+                                                    "402.l.21869.t.7"
+                                                ],
+                                                "team_id": [
+                                                    "7"
+                                                ],
+                                                "name": [
+                                                    "luka blyat"
+                                                ],
+                                                "is_owned_by_current_login": [
+                                                    "1"
+                                                ],
+                                                "url": [
+                                                    "https://basketball.fantasysports.yahoo.com/nba/21869/7"
+                                                ],
+                                                "team_logos": [
+                                                    {
+                                                        "team_logo": [
+                                                            {
+                                                                "size": [
+                                                                    "large"
+                                                                ],
+                                                                "url": [
+                                                                    "https://yahoofantasysports-res.cloudinary.com/image/upload/t_s192sq/fantasy-logos/dc9e55645a69a70515a0f19b953275de13699d3a8d3d9b7389bff5a8c854c1da.jpg"
+                                                                ]
+                                                            }
+                                                        ]
+                                                    }
+                                                ],
+                                                "waiver_priority": [
+                                                    "2"
+                                                ],
+                                                "number_of_moves": [
+                                                    "39"
+                                                ],
+                                                "number_of_trades": [
+                                                    "1"
+                                                ],
+                                                "roster_adds": [
+                                                    {
+                                                        "coverage_type": [
+                                                            "week"
+                                                        ],
+                                                        "coverage_value": [
+                                                            "11"
+                                                        ],
+                                                        "value": [
+                                                            "3"
+                                                        ]
+                                                    }
+                                                ],
+                                                "league_scoring_type": [
+                                                    "head"
+                                                ],
+                                                "has_draft_grade": [
+                                                    "0"
+                                                ],
+                                                "auction_budget_total": [
+                                                    "200"
+                                                ],
+                                                "auction_budget_spent": [
+                                                    "200"
+                                                ],
+                                                "managers": [
+                                                    {
+                                                        "manager": [
+                                                            {
+                                                                "manager_id": [
+                                                                    "7"
+                                                                ],
+                                                                "nickname": [
+                                                                    "Athi"
+                                                                ],
+                                                                "guid": [
+                                                                    "6GKUF7T6OUWZB3OPZH5ABYTCOU"
+                                                                ],
+                                                                "is_current_login": [
+                                                                    "1"
+                                                                ],
+                                                                "email": [
+                                                                    "athiphenom23@yahoo.ca"
+                                                                ],
+                                                                "image_url": [
+                                                                    "https://s.yimg.com/ag/images/default_user_profile_pic_64sq.jpg"
+                                                                ],
+                                                                "felo_score": [
+                                                                    "800"
+                                                                ],
+                                                                "felo_tier": [
+                                                                    "platinum"
+                                                                ]
+                                                            }
+                                                        ]
+                                                    }
+                                                ],
+                                                "team_stats": [
+                                                    {
+                                                        "coverage_type": [
+                                                            "week"
+                                                        ],
+                                                        "week": [
+                                                            "11"
+                                                        ],
+                                                        "stats": [
+                                                            {
+                                                                "stat": [
+                                                                    {
+                                                                        "stat_id": [
+                                                                            "9004003"
+                                                                        ],
+                                                                        "value": [
+                                                                            "106/215"
+                                                                        ]
+                                                                    },
+                                                                    {
+                                                                        "stat_id": [
+                                                                            "5"
+                                                                        ],
+                                                                        "value": [
+                                                                            ".493"
+                                                                        ]
+                                                                    },
+                                                                    {
+                                                                        "stat_id": [
+                                                                            "9007006"
+                                                                        ],
+                                                                        "value": [
+                                                                            "40/52"
+                                                                        ]
+                                                                    },
+                                                                    {
+                                                                        "stat_id": [
+                                                                            "8"
+                                                                        ],
+                                                                        "value": [
+                                                                            ".769"
+                                                                        ]
+                                                                    },
+                                                                    {
+                                                                        "stat_id": [
+                                                                            "10"
+                                                                        ],
+                                                                        "value": [
+                                                                            "43"
+                                                                        ]
+                                                                    },
+                                                                    {
+                                                                        "stat_id": [
+                                                                            "12"
+                                                                        ],
+                                                                        "value": [
+                                                                            "295"
+                                                                        ]
+                                                                    },
+                                                                    {
+                                                                        "stat_id": [
+                                                                            "15"
+                                                                        ],
+                                                                        "value": [
+                                                                            "77"
+                                                                        ]
+                                                                    },
+                                                                    {
+                                                                        "stat_id": [
+                                                                            "16"
+                                                                        ],
+                                                                        "value": [
+                                                                            "69"
+                                                                        ]
+                                                                    },
+                                                                    {
+                                                                        "stat_id": [
+                                                                            "17"
+                                                                        ],
+                                                                        "value": [
+                                                                            "18"
+                                                                        ]
+                                                                    },
+                                                                    {
+                                                                        "stat_id": [
+                                                                            "18"
+                                                                        ],
+                                                                        "value": [
+                                                                            "3"
+                                                                        ]
+                                                                    },
+                                                                    {
+                                                                        "stat_id": [
+                                                                            "19"
+                                                                        ],
+                                                                        "value": [
+                                                                            "43"
+                                                                        ]
+                                                                    }
+                                                                ]
+                                                            }
+                                                        ]
+                                                    }
+                                                ],
+                                                "team_points": [
+                                                    {
+                                                        "coverage_type": [
+                                                            "week"
+                                                        ],
+                                                        "week": [
+                                                            "11"
+                                                        ],
+                                                        "total": [
+                                                            "0"
+                                                        ]
+                                                    }
+                                                ],
+                                                "team_remaining_games": [
+                                                    {
+                                                        "coverage_type": [
+                                                            "week"
+                                                        ],
+                                                        "week": [
+                                                            "11"
+                                                        ],
+                                                        "total": [
+                                                            {
+                                                                "remaining_games": [
+                                                                    "37"
+                                                                ],
+                                                                "live_games": [
+                                                                    "0"
+                                                                ],
+                                                                "completed_games": [
+                                                                    "18"
+                                                                ]
+                                                            }
+                                                        ]
+                                                    }
+                                                ]
+                                            },
+                                            {
+                                                "team_key": [
+                                                    "402.l.21869.t.6"
+                                                ],
+                                                "team_id": [
+                                                    "6"
+                                                ],
+                                                "name": [
+                                                    "The Eldians"
+                                                ],
+                                                "url": [
+                                                    "https://basketball.fantasysports.yahoo.com/nba/21869/6"
+                                                ],
+                                                "team_logos": [
+                                                    {
+                                                        "team_logo": [
+                                                            {
+                                                                "size": [
+                                                                    "large"
+                                                                ],
+                                                                "url": [
+                                                                    "https://yahoofantasysports-res.cloudinary.com/image/upload/t_s192sq/fantasy-logos/b416059a6fb66f7edafd52e25006347d03ffcff7cdfb4cfac8d58e5a390524a8.jpg"
+                                                                ]
+                                                            }
+                                                        ]
+                                                    }
+                                                ],
+                                                "waiver_priority": [
+                                                    "8"
+                                                ],
+                                                "number_of_moves": [
+                                                    "8"
+                                                ],
+                                                "number_of_trades": [
+                                                    "0"
+                                                ],
+                                                "roster_adds": [
+                                                    {
+                                                        "coverage_type": [
+                                                            "week"
+                                                        ],
+                                                        "coverage_value": [
+                                                            "11"
+                                                        ],
+                                                        "value": [
+                                                            "0"
+                                                        ]
+                                                    }
+                                                ],
+                                                "league_scoring_type": [
+                                                    "head"
+                                                ],
+                                                "has_draft_grade": [
+                                                    "0"
+                                                ],
+                                                "auction_budget_total": [
+                                                    "200"
+                                                ],
+                                                "auction_budget_spent": [
+                                                    "200"
+                                                ],
+                                                "managers": [
+                                                    {
+                                                        "manager": [
+                                                            {
+                                                                "manager_id": [
+                                                                    "6"
+                                                                ],
+                                                                "nickname": [
+                                                                    "Umar"
+                                                                ],
+                                                                "guid": [
+                                                                    "KY24EY2MZK57HRY5EN2CKLQREE"
+                                                                ],
+                                                                "email": [
+                                                                    "umaryousufy@yahoo.com"
+                                                                ],
+                                                                "image_url": [
+                                                                    "https://s.yimg.com/ag/images/default_user_profile_pic_64sq.jpg"
+                                                                ],
+                                                                "felo_score": [
+                                                                    "568"
+                                                                ],
+                                                                "felo_tier": [
+                                                                    "bronze"
+                                                                ]
+                                                            }
+                                                        ]
+                                                    }
+                                                ],
+                                                "team_stats": [
+                                                    {
+                                                        "coverage_type": [
+                                                            "week"
+                                                        ],
+                                                        "week": [
+                                                            "11"
+                                                        ],
+                                                        "stats": [
+                                                            {
+                                                                "stat": [
+                                                                    {
+                                                                        "stat_id": [
+                                                                            "9004003"
+                                                                        ],
+                                                                        "value": [
+                                                                            "156/296"
+                                                                        ]
+                                                                    },
+                                                                    {
+                                                                        "stat_id": [
+                                                                            "5"
+                                                                        ],
+                                                                        "value": [
+                                                                            ".527"
+                                                                        ]
+                                                                    },
+                                                                    {
+                                                                        "stat_id": [
+                                                                            "9007006"
+                                                                        ],
+                                                                        "value": [
+                                                                            "50/59"
+                                                                        ]
+                                                                    },
+                                                                    {
+                                                                        "stat_id": [
+                                                                            "8"
+                                                                        ],
+                                                                        "value": [
+                                                                            ".847"
+                                                                        ]
+                                                                    },
+                                                                    {
+                                                                        "stat_id": [
+                                                                            "10"
+                                                                        ],
+                                                                        "value": [
+                                                                            "44"
+                                                                        ]
+                                                                    },
+                                                                    {
+                                                                        "stat_id": [
+                                                                            "12"
+                                                                        ],
+                                                                        "value": [
+                                                                            "406"
+                                                                        ]
+                                                                    },
+                                                                    {
+                                                                        "stat_id": [
+                                                                            "15"
+                                                                        ],
+                                                                        "value": [
+                                                                            "92"
+                                                                        ]
+                                                                    },
+                                                                    {
+                                                                        "stat_id": [
+                                                                            "16"
+                                                                        ],
+                                                                        "value": [
+                                                                            "93"
+                                                                        ]
+                                                                    },
+                                                                    {
+                                                                        "stat_id": [
+                                                                            "17"
+                                                                        ],
+                                                                        "value": [
+                                                                            "23"
+                                                                        ]
+                                                                    },
+                                                                    {
+                                                                        "stat_id": [
+                                                                            "18"
+                                                                        ],
+                                                                        "value": [
+                                                                            "9"
+                                                                        ]
+                                                                    },
+                                                                    {
+                                                                        "stat_id": [
+                                                                            "19"
+                                                                        ],
+                                                                        "value": [
+                                                                            "34"
+                                                                        ]
+                                                                    }
+                                                                ]
+                                                            }
+                                                        ]
+                                                    }
+                                                ],
+                                                "team_points": [
+                                                    {
+                                                        "coverage_type": [
+                                                            "week"
+                                                        ],
+                                                        "week": [
+                                                            "11"
+                                                        ],
+                                                        "total": [
+                                                            "9"
+                                                        ]
+                                                    }
+                                                ],
+                                                "team_remaining_games": [
+                                                    {
+                                                        "coverage_type": [
+                                                            "week"
+                                                        ],
+                                                        "week": [
+                                                            "11"
+                                                        ],
+                                                        "total": [
+                                                            {
+                                                                "remaining_games": [
+                                                                    "31"
+                                                                ],
+                                                                "live_games": [
+                                                                    "0"
+                                                                ],
+                                                                "completed_games": [
+                                                                    "20"
+                                                                ]
+                                                            }
+                                                        ]
+                                                    }
+                                                ]
+                                            }
+                                        ]
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    }
+}

@@ -120,14 +120,6 @@ img{
 
 }
 
-/* .signOutButton {
-  position: absolute;
-  width: 100%;
-  display: flex;
-  justify-content: center; 
-  bottom: 10px; 
-}  */
-
  .drop_down {
   display: block;
   font-size: 16px;
@@ -160,7 +152,6 @@ img{
 
 .yahoo-button{
   color: #fff !important;
-  text-transform: uppercase;
   text-decoration: none;
   background: #60a3bc;
   padding: 20px;
@@ -216,17 +207,13 @@ text-shadow: 0px 0px 6px rgba(255, 255, 255, 1);
 .dropdown-menu h2 {
   padding:10px 0;
 }
-/* .dropdown-menu .container
-{
-  height: 100%;
-} */
+
 
 .grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 20px;
   height: 100%;
-
 }
 
 .submit-btn
@@ -244,8 +231,54 @@ cursor:pointer;
 .submit {
   padding: 20px 0;
   text-align: center;
-
 }
+
+/* TopPlayerGrid */
+.playerGrid
+{
+  background-color: lightcyan;
+  padding: 20px 0;
+  flex:1
+}
+
+.player-grid
+{
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 20px;
+  height: 100%;
+}
+
+.playerGrid .container
+{
+  max-width: 2000px!important;
+}
+
+.player-card{
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  word-wrap: break-word;
+  background-color: #fff;
+  background-clip: border-box;
+  border: 1px solid rgba(0,0,0,.125);
+  border-radius: .25rem;
+}
+
+.card-header{
+  padding: .75rem 1.25rem;
+  margin-bottom: 0;
+  background-color: rgba(0,0,0,.03);
+  border-bottom: 1px solid rgba(0,0,0,.125);
+}
+
+.card-body {
+  flex: 1 1 auto;
+  min-height: 300px;
+  padding: 1.25rem;
+}
+
 
 @media only screen and (max-width: 630px) {
   .modal-icons {

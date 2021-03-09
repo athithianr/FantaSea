@@ -1,21 +1,23 @@
 import { useState, useEffect } from 'react'
 import DatePicker from 'react-datepicker'
+import ContentLoader from 'styled-content-loader'
+
 
 import "react-datepicker/dist/react-datepicker.css";
 
 
 const axios = require('axios')
+let leagues;
+let league_key;
 
 
-
-const LeagueMenu = () => {
-    // const url = 'https://fantasysports.yahooapis.com/fantasy/v2/users;use_login=1//games;game_key={402}/leagues'
+const LeagueMenu = ({ sendPlayerData }) => {
     var parser = new DOMParser();
     let league_list = [];
-
     const [leagueList, setLeagueList,] = useState(league_list)
     const [startDate, setStartDate] = useState(new Date());
     const [endDate, setEndDate] = useState(new Date());
+    const [isLoading, setLoad] = useState(true)
 
 
     function createLeagueDropdown() {
@@ -24,6 +26,7 @@ const LeagueMenu = () => {
             for (let i = 0; i < leagueList.length; i++) {
                 leagueoptions += `<option value=${leagueList[i]}>2020 - ${leagueList[i]}</option>`
             }
+            setLoad(false)
             document.getElementById("leagues").innerHTML = leagueoptions;
             return;
         }
@@ -31,15 +34,29 @@ const LeagueMenu = () => {
             setTimeout(createLeagueDropdown, 500)
         }
     }
+    function handleDropdownSelections() {
+        let leagueSelected = document.getElementById("leagues").value;
+        let positionSelected = document.getElementById("position").value;
+        for (let i = 0; i < leagues.getElementsByTagName("league").length; i++) {
+            const league = leagues.getElementsByTagName("league")[i]
+            if (league.getElementsByTagName("name")[0].innerHTML == leagueSelected) {
+                league_key = league.getElementsByTagName("league_key")[0].innerHTML
+            }
+        }
+        axios.get(`http://localhost:5000/extractPlayers/${league_key},${positionSelected}`)
+            .then(res => {
+                sendPlayerData(res)
+            }).catch((err) => console.log(err))
+    }
 
     function getLeagueData() {
-        axios.get(`http://localhost:5000/makeRequest`)
+        axios.get(`http://localhost:5000/setup`)
             .then(res => {
                 let xmlDoc = parser.parseFromString(res.data, "text/xml");
                 const root = xmlDoc.documentElement
                 const games = root.getElementsByTagName("game")
-                if (games[8].getElementsByTagName("season")[0].innerHTML == 2020) {
-                    const leagues = games[8].getElementsByTagName("leagues")[0]
+                if (games[games.length - 1].getElementsByTagName("season")[0].innerHTML == 2020) {
+                    leagues = games[games.length - 1].getElementsByTagName("leagues")[0]
                     const numLeagues = leagues.getElementsByTagName("league").length;
                     for (let i = 0; i < numLeagues; i++) {
                         const league = leagues.getElementsByTagName("league")[i]
@@ -57,58 +74,58 @@ const LeagueMenu = () => {
     }, []); // <-- empty array means 'run once'
 
     return (
-        <section className="dropdown-menu">
-            <div className="container">
-                <h2 className="dropdown-heading text-center my-1">Filters</h2>
-                <div className="grid grid-2 text-center my-4">
-                    <div className="drop_down">
-                        <label for="leagues">Choose a League: </label>
-                        <select name="leagues" id="leagues"></select>
+        <ContentLoader
+            isLoading={isLoading}>
+            <section className="dropdown-menu">
+                <div className="container">
+                    <h2 className="dropdown-heading text-center my-1">Filters</h2>
+                    <div className="grid grid-2 text-center my-4">
+                        <div className="drop_down">
+                            <label for="leagues">Choose a League: </label>
+                            <select name="leagues" id="leagues"></select>
+                        </div>
+                        <div className="drop_down">
+                            <label for="agro">Aggressiveness </label>
+                            <select name="agro" id="leagues"></select>
+                        </div>
+                        <div className="drop_down">
+                            <label for="date-range">Select a date range: </label>
+                            <br></br>
+                            <DatePicker
+                                selected={startDate}
+                                onChange={date => setStartDate(date)}
+                                selectsStart
+                                startDate={startDate}
+                                endDate={endDate}
+                            />
+                            <DatePicker
+                                selected={endDate}
+                                onChange={date => setEndDate(date)}
+                                selectsEnd
+                                startDate={startDate}
+                                endDate={endDate}
+                                minDate={startDate}
+                            />
+                        </div>
+                        <div className="drop_down">
+                            <label for="positions">Position: </label>
+                            <br></br>
+                            <select name="select-position" id="position">
+                                <option value="select">Select</option>
+                                <option value="pg">PG</option>
+                                <option value="sg">SG</option>
+                                <option value="sf">SF</option>
+                                <option value="pf">PF</option>
+                                <option value="c">C</option>
+                            </select>
+                        </div>
                     </div>
-                    <div className="drop_down">
-                        <label for="leagues">Aggressiveness </label>
-                        <select name="leagues" id="leagues"></select>
-                    </div>
-                    <div className="drop_down">
-                        <label for="date-range">Select a date range: </label>
-                        <br></br>
-                        <DatePicker
-                            selected={startDate}
-                            onChange={date => setStartDate(date)}
-                            selectsStart
-                            startDate={startDate}
-                            endDate={endDate}
-                        />
-                        <DatePicker
-                            selected={endDate}
-                            onChange={date => setEndDate(date)}
-                            selectsEnd
-                            startDate={startDate}
-                            endDate={endDate}
-                            minDate={startDate}
-                        />
-                    </div>
-                    <div className="drop_down">
-                        <label for="positions">Position: </label>
-                        <br></br>
-                        <select name="select-position" id="">
-                            <option value="select">Select</option>
-                            <option value="pg">PG</option>
-                            <option value="sg">SG</option>
-                            <option value="sf">SF</option>
-                            <option value="pf">PF</option>
-                            <option value="c">C</option>
-                            <option value="forward">F</option>
-                            <option value="guard">G</option>
-                        </select>
+                    <div className="submit" onClick={handleDropdownSelections}>
+                        <button className="submit-btn">Submit</button>
                     </div>
                 </div>
-                <div className="submit">
-                    <button className="submit-btn">Submit</button>
-                </div>
-            </div>
-        </section >
-
+            </section >
+        </ContentLoader>
     )
 }
 
