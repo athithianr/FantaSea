@@ -68,77 +68,77 @@ function refreshAuthorizationToken(token) {
   });
 }
 
-function Team() {
-  this.name = '',
-    this.team_key = '',
-    this.stats = [];
-}
+// function Team() {
+//   this.name = '',
+//     this.team_key = '',
+//     this.stats = [];
+// }
 
 
-async function parseMatchup(data) {
+// async function parseMatchup(data) {
 
-  // let team1 = {
-  //   fg_total: '9004003',
-  //   fg : '5',
-  //   ft_total : '9007006',
-  //   ft : '8',
-  //   threes: '10',
-  //   pts : '12',
-  //   rebs : '15',
-  //   assists : '16',
-  //   steals: '17',
-  //   blocks: '18',
-  //   tovs:'19'
-  // }
-
-
+//   // let team1 = {
+//   //   fg_total: '9004003',
+//   //   fg : '5',
+//   //   ft_total : '9007006',
+//   //   ft : '8',
+//   //   threes: '10',
+//   //   pts : '12',
+//   //   rebs : '15',
+//   //   assists : '16',
+//   //   steals: '17',
+//   //   blocks: '18',
+//   //   tovs:'19'
+//   // }
 
 
-  let team1 = new Team()
-  let team2 = new Team()
-  let matchup_diff = {}
 
 
-  parseString(data, function (err, result) {
-    teams_data = result.fantasy_content.team[0].matchups[0].matchup[0].teams[0];
-    team1.name = teams_data.team[0].name[0]
-    team1.team_key = teams_data.team[0].team_key[0]
-    team2.name = teams_data.team[1].name[0]
-    team2.team_key = teams_data.team[1].team_key[0]
-    team1_stats = teams_data.team[0].team_stats[0].stats;
-    team2_stats = teams_data.team[1].team_stats[0].stats;
-    for (let i = 0; i < team1_stats[0].stat.length; i++) {
-      team1.stats.push(team1_stats[0].stat[i])
-      team2.stats.push(team2_stats[0].stat[i])
-    }
-  });
+//   let team1 = new Team()
+//   let team2 = new Team()
+//   let matchup_diff = {}
 
-  for (let i = 4; i < 11; i++) {
-    if (team1.stats[i].stat_id[0] !== 9004003 || 5 || 9007006 || 8) {
-      matchup_diff[team1.stats[i].stat_id] = Math.abs(team1.stats[i].value - team2.stats[i].value);
-    }
-  }
 
-  let entries = Object.entries(matchup_diff);
-  let sorted = entries.sort((a, b) => a[1] - b[1]);
+//   parseString(data, function (err, result) {
+//     teams_data = result.fantasy_content.team[0].matchups[0].matchup[0].teams[0];
+//     team1.name = teams_data.team[0].name[0]
+//     team1.team_key = teams_data.team[0].team_key[0]
+//     team2.name = teams_data.team[1].name[0]
+//     team2.team_key = teams_data.team[1].team_key[0]
+//     team1_stats = teams_data.team[0].team_stats[0].stats;
+//     team2_stats = teams_data.team[1].team_stats[0].stats;
+//     for (let i = 0; i < team1_stats[0].stat.length; i++) {
+//       team1.stats.push(team1_stats[0].stat[i])
+//       team2.stats.push(team2_stats[0].stat[i])
+//     }
+//   });
 
-  console.log(sorted)
-  getPlayerPickups(sorted)
+//   for (let i = 4; i < 11; i++) {
+//     if (team1.stats[i].stat_id[0] !== 9004003 || 5 || 9007006 || 8) {
+//       matchup_diff[team1.stats[i].stat_id] = Math.abs(team1.stats[i].value - team2.stats[i].value);
+//     }
+//   }
 
-}
+//   let entries = Object.entries(matchup_diff);
+//   let sorted = entries.sort((a, b) => a[1] - b[1]);
 
-async function getPlayerPickups(data) {
-  const stat_id = data[0][0]
-  const players = [];
-  const topPlayerData = await makeAPIrequest(`https://fantasysports.yahooapis.com/fantasy/v2/league/402.l.21869/players;status=A;sort=${stat_id};sort_type=lastmonth;count=5`)
-  parseString(topPlayerData.data, function (err, result) {
-    console.log(result.fantasy_content.league[0].players)
-    const players_list = result.fantasy_content.league[0].players[0].player;
-    for (let i = 0; i < players_list.length; i++) {
-      console.log(players_list[i])
-    }
-  });
-}
+//   console.log(sorted)
+//   getPlayerPickups(sorted)
+
+// }
+
+// async function getPlayerPickups(data) {
+//   const stat_id = data[0][0]
+//   const players = [];
+//   const topPlayerData = await makeAPIrequest(`https://fantasysports.yahooapis.com/fantasy/v2/league/402.l.21869/players;status=A;sort=${stat_id};sort_type=lastmonth;count=5`)
+//   parseString(topPlayerData.data, function (err, result) {
+//     console.log(result.fantasy_content.league[0].players)
+//     const players_list = result.fantasy_content.league[0].players[0].player;
+//     for (let i = 0; i < players_list.length; i++) {
+//       console.log(players_list[i])
+//     }
+//   });
+// }
 
 
 
@@ -177,7 +177,7 @@ async function makeAPIrequest(url) {
 // const resp = getInitialAuthorization();
 // makeAPIrequest('https://fantasysports.yahooapis.com/fantasy/v2/team/402.l.21869.t.7/matchups;weeks=11')
 // makeAPIrequest('https://fantasysports.yahooapis.com/fantasy/v2/league/402.l.21869/players;status=A;sort=16;sort_type=lastmonth;count=5')
-makeAPIrequest('https://fantasysports.yahooapis.com/fantasy/v2/users;use_login=1/games;game_keys=nba/teams')
+makeAPIrequest('https://fantasysports.yahooapis.com/fantasy/v2/players;player_keys=402.p.5156,402.p.5162/stats;type=lastmonth')
 //'https://fantasysports.yahooapis.com/fantasy/v2/team/402.l.21869.t.7/roster/players'
 //https://fantasysports.yahooapis.com/fantasy/v2/league/402.l.21869.t.7/scoreboard
 //https://fantasysports.yahooapis.com/fantasy/v2/users;use_login=1//games;game_key={402}/leagues

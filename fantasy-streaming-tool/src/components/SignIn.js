@@ -34,18 +34,18 @@ const SignIn = () => {
                         <div class="modal-icons">
                             <div class="flex-container">
                                 <div class=" icon-flex">
-                                    <a href="https://github.com/athithianr/fantasy-streaming-application" target="_blank">
+                                    <a href="https://github.com/athithianr/fantasy-streaming-application" target="_blank" rel="noreferrer">
                                         <i class="fa fa-github"></i>
                                     </a>
                                 </div>
                                 <div class=" icon-flex">
-                                    <a href="" target="_blank">
+                                    <a href="https://github.com/athithianr/fantasy-streaming-application" target="_blank" rel="noreferrer">
                                         <i class="fa fa-instagram"></i>
                                     </a>
                                 </div>
                                 <div class="icon-flex">
-                                    <a href=""
-                                        target="_blank">
+                                    <a href="https://github.com/athithianr/fantasy-streaming-application"
+                                        target="_blank" rel="noreferrer">
                                         <i class="fa fa-file"></i>
                                     </a>
                                 </div>

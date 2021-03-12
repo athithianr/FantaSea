@@ -1,5 +1,5 @@
 import 'firebase/auth';
-import './App.css';
+import '../App.css';
 import { useState} from 'react'
 
 import LeagueMenu from './LeagueMenu'
@@ -10,12 +10,8 @@ const MainPage = (props) => {
     return (
         <div className="main-page">
             <NavBar auth={props.auth}></NavBar>
-            <playerDataContextProvider>
                 <LeagueMenu sendPlayerData={sendPlayerData}></LeagueMenu>
-                <br></br>
-                <br></br>
                 <TopPickupGrid playerData={playerData} ></TopPickupGrid>
-            </playerDataContextProvider>
         </div>
 
     );

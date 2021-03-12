@@ -13,6 +13,7 @@ app.use(cors())
 
 const AUTH_HEADER = Buffer.from(`${config.CONSUMER_KEY}:${config.CONSUMER_SECRET}`).toString(`base64`);
 const AUTH_FILE = "/Users/arajkumar/Desktop/fantasy-streaming-application/fantasy-streaming-tool/src/auth.json"
+const BASE_URL = "https://fantasysports.yahooapis.com/fantasy/v2";
 
 app.get('/', (req, res) => {
   res.status(200).send(`Hello World! Our server is running at port ${port}`);
@@ -100,43 +101,62 @@ app.get('/authorize', async (request, res) => {
   }
   const fetch_res = await fetch(url, options)
   const json = await fetch_res.json()
-  console.log(json)
 }
 )
 
+
 app.get('/setup', async (request, res) => {
-  const response = await makeAPIrequest('https://fantasysports.yahooapis.com/fantasy/v2/users;use_login=1//games;game_key={402}/leagues');
+  const response = await makeAPIrequest(`${BASE_URL}/users;use_login=1//games;game_key={402}/leagues`);
   res.status(200).send(response.data)
 }
 )
+async function getTeamKey(league_key) {
+  const response = await makeAPIrequest(`${BASE_URL}/users;use_login=1/games;game_keys=nba/teams`)
+  let team_key;
+  parseString(response.data, function (err, result) {
+    const games = result.fantasy_content.users[0].user[0].games[0].game;
+    for (let i = 0; i < games.length; i++) {
+      if (games[i].teams[0].team[0].team_key[0].includes(league_key))
+        team_key = games[i].teams[0].team[0].team_key[0];
+    }
+  });
+  return team_key;
+}
+
+app.get('/getPlayerStats/:player_keys', async (request, res) => {
+  const player_keys = request.params.player_keys.split(',');
+  let request_url = `${BASE_URL}/players;player_keys=`
+  for (let i = 0; i < player_keys.length; i++) {
+    request_url += player_keys[i] + ','
+  }
+  let url = request_url.slice(0, -1) 
+  url+= '/stats;type=lastmonth'
+  const resp = await makeAPIrequest(url)
+  parseString(resp.data, function (err, result) {
+
+    res.status(200).send(result.fantasy_content.players[0])
+  }
+  );
+}
+)
+
+
 
 app.get('/extractPlayers/:league_keyposition', async (request, res) => {
+
   const league_key_position = request.params.league_keyposition.split(',');
   const league_key = league_key_position[0];
   const position_str = league_key_position[1] ? `;position=${league_key_position[1].toUpperCase()}` : '';
-  console.log(position_str)
-  console.log(league_key)
-  let team_key;
-  const response = await makeAPIrequest('https://fantasysports.yahooapis.com/fantasy/v2/users;use_login=1/games;game_keys=nba/teams')
 
-  parseString(response.data, function (err, result) {
-    const games = result.fantasy_content.users[0].user[0].games[0].game;
+  const team_key = await getTeamKey(league_key);
 
-    for (let i = 0; i < games.length; i++) {
-      console.log(games[i].teams[0].team[0].team_key[0])
-      if (games[i].teams[0].team[0].team_key[0].includes(league_key)) {
-        team_key = games[i].teams[0].team[0].team_key[0];
-      }
-    }
-  });
-
-  const matchup_response = await makeAPIrequest(`https://fantasysports.yahooapis.com/fantasy/v2/team/${team_key}/matchups;weeks=11`)
+  const matchup_response = await makeAPIrequest(`${BASE_URL}/team/${team_key}/matchups;weeks=11`)
   parseMatchup(matchup_response.data)
 
   function Team() {
     this.name = '',
-    this.team_key = '',
-    this.stats = [];
+      this.team_key = '',
+      this.stats = [];
   }
 
   async function parseMatchup(data) {
@@ -144,9 +164,24 @@ app.get('/extractPlayers/:league_keyposition', async (request, res) => {
     let team1 = new Team()
     let team2 = new Team()
     let matchup_diff = {}
+    let matchup_parsed;
+    let stat_winners;
+    let stat_win = {
+      '5': 0,
+      '8': 0,
+      '10': 0,
+      '12': 0,
+      '15': 0,
+      '16': 0,
+      '17': 0,
+      '18': 0,
+      '19': 0
+    }
 
     parseString(data, function (err, result) {
+      matchup_parsed = result;
       teams_data = result.fantasy_content.team[0].matchups[0].matchup[0].teams[0];
+      stat_winners = result.fantasy_content.team[0].matchups[0].matchup[0].stat_winners[0].stat_winner
       team1.name = teams_data.team[0].name[0]
       team1.team_key = teams_data.team[0].team_key[0]
       team2.name = teams_data.team[1].name[0]
@@ -156,26 +191,32 @@ app.get('/extractPlayers/:league_keyposition', async (request, res) => {
       for (let i = 0; i < team1_stats[0].stat.length; i++) {
         team1.stats.push(team1_stats[0].stat[i])
         team2.stats.push(team2_stats[0].stat[i])
+        if (i < stat_winners.length) {
+          if (stat_winners[i].winner_team_key[0] === team_key) {
+            stat_win[stat_winners[i].stat_id[0]] = 1;
+          }
+        }
       }
     });
-
     for (let i = 4; i < 11; i++) {
-        matchup_diff[team1.stats[i].stat_id] = Math.abs(team1.stats[i].value - team2.stats[i].value);
+      matchup_diff[team1.stats[i].stat_id] = Math.abs(team1.stats[i].value - team2.stats[i].value);
     }
 
     let entries = Object.entries(matchup_diff);
-    let sorted = entries.sort((a, b) => a[1] - b[1]);
+    const sorted = entries.sort((a, b) => a[1] - b[1]);
 
-    getPlayerPickups(sorted)
+    getPlayerPickups(sorted, matchup_parsed, stat_win)
 
   }
-  async function getPlayerPickups(data) {
+  async function getPlayerPickups(data, matchup_parsed, stat_win) {
     const stat_id = data[0][0]
-    let player_obj;
-    const topPlayerData = await makeAPIrequest(`https://fantasysports.yahooapis.com/fantasy/v2/league/${league_key}/players;status=A;sort=${stat_id};sort_type=lastmonth;count=5${position_str}`)
+    let player_obj = [];
+    const topPlayerData = await makeAPIrequest(`${BASE_URL}/league/${league_key}/players;status=A;sort=${stat_id};sort_type=lastmonth;count=5${position_str}`)
     parseString(topPlayerData.data, function (err, result) {
-      console.log(result.fantasy_content.league[0].players)
-      player_obj = result.fantasy_content.league[0].players[0].player;
+      player_obj.push(result.fantasy_content.league[0].players[0].player);
+      player_obj.push(matchup_parsed)
+      player_obj.push(data)
+      player_obj.push(stat_win)
       res.status(200).send(player_obj)
     });
   }

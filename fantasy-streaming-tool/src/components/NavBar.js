@@ -8,7 +8,6 @@ const SignOut = (props) => {
 }
 
 const NavBar = (props) => {
-    console.log(props.auth)
     return (
         <div class="navbar">
             <div class="container flex">
