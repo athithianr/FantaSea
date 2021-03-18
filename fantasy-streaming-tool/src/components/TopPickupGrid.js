@@ -1,39 +1,56 @@
 import playerIcon from '../images/empty_profile_icon.png'
 const axios = require('axios')
 
-async function getPlayerStats(playerData) {
-    let player_keys = [];
-    for (let i = 0; i < playerData.length; i++) {
-        player_keys.push(playerData[i].player_key)
-    }
-    axios.get(`http://localhost:5000/getPlayerStats/${player_keys}`)
-        .then(res => {
-            console.log(res.data)
-        }
-        )
-}
+
 
 const TopPickupGrid = ({ playerData }) => {
+
+    const stat_mappings = {
+        '0': 'Total Games Played',
+        '10': 'Threes',
+        '12': 'Points',
+        '15': 'Rebounds',
+        '16': 'Assists',
+        '17': 'Steals',
+        '18': 'Blocks',
+        '19': 'Turnovers'
+    }
+
+
 
     function populatePlayerGrid() {
         let position = "";
         let img = playerIcon;
         let name = "";
         for (let i = 0; i < 5; i++) {
-            img = 'https' + playerData[i].image_url[0].replace(/https.*\/https/, '');
-            name = playerData[i].name[0].full[0];
-            position = playerData[i].display_position[0];
+            img = 'https' + playerData[0][i].image_url[0].replace(/https.*\/https/, '');
+            name = playerData[0][i].name[0].full[0];
+            position = playerData[0][i].display_position[0];
             document.getElementById(`img${i + 1}`).src = img;
             document.getElementById(`name${i + 1}`).innerHTML = name;
             document.getElementById(`pos${i + 1}`).innerHTML = position;
         }
         return;
     }
-
+    function populatePlayerStats() {
+        const keys = Object.keys(stat_mappings)
+        let stats = {}
+        for (let i = 0; i < 5; i++) {
+            let games_played = playerData[1].player[i].player_stats[0].stats[0].stat[0].value[0]
+            let player_stats =`<br></br><h3>Average Stats(Last month): </h2><p style=font-size:15px>Total Games Played: ${games_played}</p>`
+            for (let j = 1; j < keys.length; j++) {
+                stats[playerData[1].player[i].player_stats[0].stats[0].stat[keys[j]].stat_id[0]] = (playerData[1].player[i].player_stats[0].stats[0].stat[keys[j]].value[0] / games_played).toFixed(1);
+                player_stats += `<p style=font-size:15px>${stat_mappings[playerData[1].player[i].player_stats[0].stats[0].stat[keys[j]].stat_id[0]]}: ${(playerData[1].player[i].player_stats[0].stats[0].stat[keys[j]].value[0] / games_played).toFixed(1)}</p>`
+            }
+            document.getElementById(`stats${i+1}`).innerHTML = player_stats;
+            
+        }
+        console.log(stats)
+    }
 
     if (playerData) {
-        getPlayerStats(playerData)
         populatePlayerGrid()
+        populatePlayerStats()
     }
 
     return (
@@ -49,6 +66,8 @@ const TopPickupGrid = ({ playerData }) => {
                         </div>
                         <div className="card-body">
                             <img id="img1" src={playerIcon} alt=""></img>
+                            <div id="stats1" className="text-center">
+                            </div>
                         </div>
                     </div>
                     <div className="player-card">
@@ -59,6 +78,8 @@ const TopPickupGrid = ({ playerData }) => {
                         </div>
                         <div className="card-body">
                             <img id="img2" src={playerIcon} alt="" ></img>
+                            <div id="stats2" className="text-center">
+                            </div>
                         </div>
                     </div>
                     <div className="player-card">
@@ -69,6 +90,8 @@ const TopPickupGrid = ({ playerData }) => {
                         </div>
                         <div className="card-body">
                             <img id="img3" src={playerIcon} alt="" ></img>
+                            <div id="stats3" className="text-center">
+                            </div>
                         </div>
                     </div>
                     <div className="player-card">
@@ -79,6 +102,8 @@ const TopPickupGrid = ({ playerData }) => {
                         </div>
                         <div className="card-body">
                             <img id="img4" src={playerIcon} alt=""></img>
+                            <div id="stats4" className="text-center">
+                            </div>
                         </div>
                     </div>
                     <div className="player-card">
@@ -89,6 +114,8 @@ const TopPickupGrid = ({ playerData }) => {
                         </div>
                         <div className="card-body">
                             <img id="img5" src={playerIcon} alt=""></img>
+                            <div id="stats5" className="text-center">
+                            </div>
                         </div>
                     </div>
                 </div>

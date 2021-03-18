@@ -7,6 +7,7 @@ const fetch = require('node-fetch')
 const fs = require('fs');
 const auth = require('./auth.json')
 const axios = require('axios')
+const DataFrame = require('dataframe-js').DataFrame
 const parseString = require('xml2js').parseString;
 
 app.use(cors())
@@ -15,8 +16,11 @@ const AUTH_HEADER = Buffer.from(`${config.CONSUMER_KEY}:${config.CONSUMER_SECRET
 const AUTH_FILE = "/Users/arajkumar/Desktop/fantasy-streaming-application/fantasy-streaming-tool/src/auth.json"
 const BASE_URL = "https://fantasysports.yahooapis.com/fantasy/v2";
 
-app.get('/', (req, res) => {
-  res.status(200).send(`Hello World! Our server is running at port ${port}`);
+app.get('/', async (req, res) => {
+  const df=await DataFrame.fromCSV('/Users/arajkumar/Desktop/fantasy-streaming-application/fantasy-streaming-tool/scraped_data/defense_vs_position.csv')
+  df.show()
+  res.status(200).send("Hello!")
+  // console.log(df)
 });
 
 //write to external file
@@ -123,25 +127,6 @@ async function getTeamKey(league_key) {
   return team_key;
 }
 
-app.get('/getPlayerStats/:player_keys', async (request, res) => {
-  const player_keys = request.params.player_keys.split(',');
-  let request_url = `${BASE_URL}/players;player_keys=`
-  for (let i = 0; i < player_keys.length; i++) {
-    request_url += player_keys[i] + ','
-  }
-  let url = request_url.slice(0, -1) 
-  url+= '/stats;type=lastmonth'
-  const resp = await makeAPIrequest(url)
-  parseString(resp.data, function (err, result) {
-
-    res.status(200).send(result.fantasy_content.players[0])
-  }
-  );
-}
-)
-
-
-
 app.get('/extractPlayers/:league_keyposition', async (request, res) => {
 
   const league_key_position = request.params.league_keyposition.split(',');
@@ -150,7 +135,7 @@ app.get('/extractPlayers/:league_keyposition', async (request, res) => {
 
   const team_key = await getTeamKey(league_key);
 
-  const matchup_response = await makeAPIrequest(`${BASE_URL}/team/${team_key}/matchups;weeks=11`)
+  const matchup_response = await makeAPIrequest(`${BASE_URL}/team/${team_key}/matchups;weeks=12`)
   parseMatchup(matchup_response.data)
 
   function Team() {
@@ -192,9 +177,12 @@ app.get('/extractPlayers/:league_keyposition', async (request, res) => {
         team1.stats.push(team1_stats[0].stat[i])
         team2.stats.push(team2_stats[0].stat[i])
         if (i < stat_winners.length) {
+          if(stat_winners[i].winner_team_key)
+          {
           if (stat_winners[i].winner_team_key[0] === team_key) {
             stat_win[stat_winners[i].stat_id[0]] = 1;
           }
+        }
         }
       }
     });
@@ -212,13 +200,39 @@ app.get('/extractPlayers/:league_keyposition', async (request, res) => {
     const stat_id = data[0][0]
     let player_obj = [];
     const topPlayerData = await makeAPIrequest(`${BASE_URL}/league/${league_key}/players;status=A;sort=${stat_id};sort_type=lastmonth;count=5${position_str}`)
+    let response_result;
     parseString(topPlayerData.data, function (err, result) {
-      player_obj.push(result.fantasy_content.league[0].players[0].player);
-      player_obj.push(matchup_parsed)
-      player_obj.push(data)
-      player_obj.push(stat_win)
-      res.status(200).send(player_obj)
+      response_result = result;
+
     });
+    const players = response_result.fantasy_content.league[0].players[0].player
+    let player_keys = [];
+    for (let i = 0; i < players.length; i++) {
+      player_keys.push(players[i].player_key)
+    }
+    const player_stats = await getPlayerStats(player_keys);
+    player_obj.push(players);
+    player_obj.push(matchup_parsed)
+    player_obj.push(data)
+    player_obj.push(stat_win)
+    player_obj.push(player_stats)
+    res.status(200).send(player_obj)
+  }
+  
+  async function getPlayerStats(player_keys) {
+    let request_url = `${BASE_URL}/players;player_keys=`
+    for (let i = 0; i < player_keys.length; i++) {
+      request_url += player_keys[i] + ','
+    }
+    let url = request_url.slice(0, -1)
+    url += '/stats;type=lastmonth'
+    const resp = await makeAPIrequest(url)
+    let stats;
+    parseString(resp.data, function (err, result) {
+      stats = result.fantasy_content.players[0]
+    }
+    )
+    return stats;
   }
 }
 )

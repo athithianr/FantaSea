@@ -44,10 +44,13 @@ const LeagueMenu = ({ sendPlayerData }) => {
         axios.get(`http://localhost:5000/extractPlayers/${league_key},${positionSelected}`)
             .then(res => {
                 const sendList = []
+                const sendPlayerList = []
                 sendList.push(res.data[1])
                 sendList.push(res.data[2])
                 sendList.push(res.data[3])
-                sendPlayerData(res.data[0])
+                sendPlayerList.push(res.data[0])
+                sendPlayerList.push(res.data[4])
+                sendPlayerData(sendPlayerList)
                 sendMatchupData(sendList)
             }).catch((err) => console.log(err))
     }
