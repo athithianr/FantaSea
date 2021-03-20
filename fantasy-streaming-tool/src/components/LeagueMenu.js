@@ -35,6 +35,8 @@ const LeagueMenu = ({ sendPlayerData }) => {
     function handleDropdownSelections() {
         let leagueSelected = document.getElementById("leagues").value;
         let positionSelected = document.getElementById("position").value;
+        console.log(startDate)
+        console.log(endDate)
         for (let i = 0; i < leagues.getElementsByTagName("league").length; i++) {
             const league = leagues.getElementsByTagName("league")[i]
             if (league.getElementsByTagName("name")[0].innerHTML == leagueSelected) {
@@ -45,14 +47,28 @@ const LeagueMenu = ({ sendPlayerData }) => {
             .then(res => {
                 const sendList = []
                 const sendPlayerList = []
-                sendList.push(res.data[1])
-                sendList.push(res.data[2])
-                sendList.push(res.data[3])
-                sendPlayerList.push(res.data[0])
-                sendPlayerList.push(res.data[4])
+                const players = res.data.players;
+                const matchup_data = res.data.matchup;
+                const matchup_differentials = res.data.data;
+                const stat_win = res.data.stat_winners;
+                const player_stats = res.data.player_stat;
+                sendList.push(matchup_data)
+                sendList.push(matchup_differentials)
+                sendList.push(stat_win)
+                sendPlayerList.push(players)
+                sendPlayerList.push(player_stats)
                 sendPlayerData(sendPlayerList)
                 sendMatchupData(sendList)
+                let teams = ''
+                for (let i = 0; i < res.data.players.length; i++) {
+                    teams += (res.data.players[i].editorial_team_abbr + ',')
+                }
+                axios.get(`http://localhost:5000/getAdvancedMatchupStats/${teams}/${startDate}/${endDate}/${matchup_differentials[0][0]}`)
+                    .then(response => {
+                        console.log(response)
+                    })
             }).catch((err) => console.log(err))
+
     }
 
     function getLeagueData() {
@@ -94,9 +110,11 @@ const LeagueMenu = ({ sendPlayerData }) => {
                                     <select name="leagues" id="leagues"></select>
                                 </div>
                                 <div className="drop_down">
-                                    <label for="agro">Aggressiveness </label>
+                                    <label for="week">Week </label>
                                     <br></br>
-                                    <select name="agro" id="leagues"></select>
+                                    <select name="week" id="weeks">
+                                        <option value="select">Latest week</option>
+                                    </select>
                                 </div>
                                 <div className="drop_down">
                                     <label for="date-range">Select a date range: </label>

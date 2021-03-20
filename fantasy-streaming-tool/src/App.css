@@ -58,7 +58,7 @@ img{
   width: 100%;
   display:flex;
   flex-direction:column;
-  background-image: url('/Users/arajkumar/Desktop/fantasy-streaming-application/fantasy-streaming-tool/src/images/joseph-barrientos-oQl0eVYd_n8-unsplash (1).jpg');
+  background-image: url('./images/joseph-barrientos-oQl0eVYd_n8-unsplash (1).jpg');
   background-size : "cover";
 }
 
@@ -167,8 +167,6 @@ img{
 }
 .yahoo-button:hover {
   text-shadow: 0px 0px 6px rgba(255, 255, 255, 1);
-  -webkit-box-shadow: 0px 5px 40px -10px rgba(0,0,0,0.57);
-  -moz-box-shadow: 0px 5px 40px -10px rgba(0,0,0,0.57);
   transition: all 0.4s ease 0s;
   }
 
@@ -192,9 +190,7 @@ transition: all 0.4s ease 0s;
 cursor:pointer;
 }
 .signOutButton:hover {
-text-shadow: 0px 0px 6px rgba(255, 255, 255, 1);
-  -webkit-box-shadow: 0px 5px 40px -10px rgba(0,0,0,0.57);
-  -moz-box-shadow: 0px 5px 40px -10px rgba(0,0,0,0.57);
+  text-shadow: 0px 0px 6px rgba(255, 255, 255, 1);
   transition: all 0.4s ease 0s;
 }
   
@@ -203,8 +199,11 @@ text-shadow: 0px 0px 6px rgba(255, 255, 255, 1);
 }
 
 .dropdown-menu .container {
-  max-width: 2000px!important;
+  max-width: 2500px!important;
   height:100%;
+}
+.dropdown-heading {
+  padding: 25px;
 }
 
 .dropdown-menu .flex {
@@ -220,21 +219,28 @@ text-shadow: 0px 0px 6px rgba(255, 255, 255, 1);
 
 .item {
   flex: 0 1 500px;
-  margin:0 20px;
-  height:100%;
+  display: flex;
+  flex-direction: column;
+  margin:0 60px;
+  align-self: stretch;
 }
 .submit-btn
 {
 color: #fff !important;
 text-decoration: none;
 background: #60a3bc;
-padding: 5px;
+padding: 10px;
 display: inline-block;
 border: none;
 transition: all 0.4s ease 0s;
 cursor:pointer;
 margin-bottom: 10px;
 }
+
+.submit-btn:hover {
+  text-shadow: 0px 0px 6px rgba(255, 255, 255, 1);
+  transition: all 0.4s ease 0s;
+  }
 
 /* TopPlayerGrid */
 .playerGrid
@@ -252,6 +258,7 @@ margin-bottom: 10px;
   gap: 10px;
   height: 100%;
   justify-content: center;
+  padding: 25px;
 }
 
 .playerGrid .container

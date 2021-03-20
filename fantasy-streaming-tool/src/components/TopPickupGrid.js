@@ -1,7 +1,4 @@
 import playerIcon from '../images/empty_profile_icon.png'
-const axios = require('axios')
-
-
 
 const TopPickupGrid = ({ playerData }) => {
 
@@ -45,7 +42,6 @@ const TopPickupGrid = ({ playerData }) => {
             document.getElementById(`stats${i+1}`).innerHTML = player_stats;
             
         }
-        console.log(stats)
     }
 
     if (playerData) {

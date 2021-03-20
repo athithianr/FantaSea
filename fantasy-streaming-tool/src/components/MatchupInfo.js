@@ -32,15 +32,14 @@ const MatchupInfo = ({ matchupData }) => {
     return (
         <>
             <h2 className="dropdown-heading text-center my-1">Matchup Differentials</h2>
-            <div style={{ 'border': '1px solid gray' }}>
+            <ContentLoader style={{ 'height': '268.38px' }} isLoading={typeof matchupData != "object"}>
+                <div style={{ 'border': '1px solid #aaa', 'border-radius': '.5em', 'height': '100%' }}>
+                    <h3 style={{padding:'10px'}}>Opponent: {opponent}</h3>
+                    <div className="text-center" id="matchup_diff" style={{ 'line-height': '15px' }}>
+                    </div>
+                </div>
+            </ContentLoader>
 
-                <ContentLoader isLoading={typeof matchupData != "object"}>
-                    <h3>Opponent: {opponent}
-                        <div className="text-center" id="matchup_diff" style={{ 'line-height': '10px' }}>
-                        </div>
-                    </h3>
-                </ContentLoader>
-            </div>
         </>
     );
 }
