@@ -1,6 +1,15 @@
 import playerIcon from '../images/empty_profile_icon.png'
+import {
+    Accordion,
+    AccordionItem,
+    AccordionItemHeading,
+    AccordionItemButton,
+    AccordionItemPanel,
+} from 'react-accessible-accordion';
+import 'react-accessible-accordion/dist/fancy-example.css';
 
-const TopPickupGrid = ({ playerData }) => {
+
+const TopPickupGrid = ({ playerData, advancedStats }) => {
 
     const stat_mappings = {
         '0': 'Total Games Played',
@@ -13,7 +22,7 @@ const TopPickupGrid = ({ playerData }) => {
         '19': 'Turnovers'
     }
 
-
+    console.log(advancedStats)
 
     function populatePlayerGrid() {
         let position = "";
@@ -34,19 +43,33 @@ const TopPickupGrid = ({ playerData }) => {
         let stats = {}
         for (let i = 0; i < 5; i++) {
             let games_played = playerData[1].player[i].player_stats[0].stats[0].stat[0].value[0]
-            let player_stats =`<br></br><h3>Average Stats(Last month): </h2><p style=font-size:15px>Total Games Played: ${games_played}</p>`
+            let player_stats = `<br></br><h3>Average Stats(Last month): </h2><p style=font-size:15px;padding:10px>Total Games Played: ${games_played}</p>`
             for (let j = 1; j < keys.length; j++) {
                 stats[playerData[1].player[i].player_stats[0].stats[0].stat[keys[j]].stat_id[0]] = (playerData[1].player[i].player_stats[0].stats[0].stat[keys[j]].value[0] / games_played).toFixed(1);
                 player_stats += `<p style=font-size:15px>${stat_mappings[playerData[1].player[i].player_stats[0].stats[0].stat[keys[j]].stat_id[0]]}: ${(playerData[1].player[i].player_stats[0].stats[0].stat[keys[j]].value[0] / games_played).toFixed(1)}</p>`
             }
-            document.getElementById(`stats${i+1}`).innerHTML = player_stats;
-            
+            document.getElementById(`stats${i + 1}`).innerHTML = player_stats;
+
         }
+    }
+    function populateMatchupStats() {
+        let matchup_data = ''
+        for (let i = 0; i < advancedStats.length; i++) {
+            for (let j = 0; j < advancedStats[i].length; j++) {
+                matchup_data += JSON.stringify(advancedStats[i][j], null, 4) + '<br></br>'
+                document.getElementById(`matchup_stats${i + 1}`).innerHTML = matchup_data
+            }
+            matchup_data=''
+        }
+
     }
 
     if (playerData) {
         populatePlayerGrid()
         populatePlayerStats()
+    }
+    if (advancedStats) {
+        populateMatchupStats()
     }
 
     return (
@@ -62,8 +85,21 @@ const TopPickupGrid = ({ playerData }) => {
                         </div>
                         <div className="card-body">
                             <img id="img1" src={playerIcon} alt=""></img>
-                            <div id="stats1" className="text-center">
-                            </div>
+                            <div id="stats1" className="text-center uniform-lines"></div>
+                            <Accordion allowZeroExpanded>
+                                <AccordionItem>
+                                    <AccordionItemHeading>
+                                        <AccordionItemButton>
+                                            Show Matchup Stats
+                                        </AccordionItemButton>
+                                    </AccordionItemHeading>
+                                    <AccordionItemPanel>
+                                        <p id="matchup_stats1">
+                                            No Matchup Stats Currently Available
+                                        </p>
+                                    </AccordionItemPanel>
+                                </AccordionItem>
+                            </Accordion>
                         </div>
                     </div>
                     <div className="player-card">
@@ -74,8 +110,21 @@ const TopPickupGrid = ({ playerData }) => {
                         </div>
                         <div className="card-body">
                             <img id="img2" src={playerIcon} alt="" ></img>
-                            <div id="stats2" className="text-center">
-                            </div>
+                            <div id="stats2" className="text-center uniform-lines"></div>
+                            <Accordion allowZeroExpanded>
+                                <AccordionItem>
+                                    <AccordionItemHeading>
+                                        <AccordionItemButton>
+                                            Show Matchup Stats
+                                        </AccordionItemButton>
+                                    </AccordionItemHeading>
+                                    <AccordionItemPanel>
+                                        <p id="matchup_stats2">
+                                            No Matchup Stats Currently Available
+                                        </p>
+                                    </AccordionItemPanel>
+                                </AccordionItem>
+                            </Accordion>
                         </div>
                     </div>
                     <div className="player-card">
@@ -86,8 +135,21 @@ const TopPickupGrid = ({ playerData }) => {
                         </div>
                         <div className="card-body">
                             <img id="img3" src={playerIcon} alt="" ></img>
-                            <div id="stats3" className="text-center">
-                            </div>
+                            <div id="stats3" className="text-center uniform-lines"></div>
+                            <Accordion allowZeroExpanded>
+                                <AccordionItem>
+                                    <AccordionItemHeading>
+                                        <AccordionItemButton>
+                                            Show Matchup Stats
+                                        </AccordionItemButton>
+                                    </AccordionItemHeading>
+                                    <AccordionItemPanel>
+                                        <p id="matchup_stats3">
+                                            No Matchup Stats Currently Available
+                                        </p>
+                                    </AccordionItemPanel>
+                                </AccordionItem>
+                            </Accordion>
                         </div>
                     </div>
                     <div className="player-card">
@@ -98,8 +160,21 @@ const TopPickupGrid = ({ playerData }) => {
                         </div>
                         <div className="card-body">
                             <img id="img4" src={playerIcon} alt=""></img>
-                            <div id="stats4" className="text-center">
-                            </div>
+                            <div id="stats4" className="text-center uniform-lines"></div>
+                            <Accordion allowZeroExpanded>
+                                <AccordionItem>
+                                    <AccordionItemHeading>
+                                        <AccordionItemButton>
+                                            Show Matchup Stats
+                                        </AccordionItemButton>
+                                    </AccordionItemHeading>
+                                    <AccordionItemPanel>
+                                        <p id="matchup_stats4">
+                                            No Matchup Stats Currently Available
+                                        </p>
+                                    </AccordionItemPanel>
+                                </AccordionItem>
+                            </Accordion>
                         </div>
                     </div>
                     <div className="player-card">
@@ -110,8 +185,21 @@ const TopPickupGrid = ({ playerData }) => {
                         </div>
                         <div className="card-body">
                             <img id="img5" src={playerIcon} alt=""></img>
-                            <div id="stats5" className="text-center">
-                            </div>
+                            <div id="stats5" className="text-center uniform-lines"></div>
+                            <Accordion allowZeroExpanded>
+                                <AccordionItem>
+                                    <AccordionItemHeading>
+                                        <AccordionItemButton>
+                                            Show Matchup Stats
+                                        </AccordionItemButton>
+                                    </AccordionItemHeading>
+                                    <AccordionItemPanel>
+                                        <p id="matchup_stats5">
+                                            No Matchup Stats Currently Available
+                                        </p>
+                                    </AccordionItemPanel>
+                                </AccordionItem>
+                            </Accordion>
                         </div>
                     </div>
                 </div>

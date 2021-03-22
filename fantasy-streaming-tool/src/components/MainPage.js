@@ -7,11 +7,12 @@ import NavBar from './NavBar'
 import TopPickupGrid from './TopPickupGrid'
 const MainPage = (props) => {
     const [playerData, sendPlayerData] = useState('')
+    const [advancedStats,sendAdvancedStats]=useState('')
     return (
         <div className="main-page">
             <NavBar auth={props.auth}></NavBar>
-                <LeagueMenu sendPlayerData={sendPlayerData}></LeagueMenu>
-                <TopPickupGrid playerData={playerData} ></TopPickupGrid>
+                <LeagueMenu sendPlayerData={sendPlayerData} sendAdvancedStats={sendAdvancedStats}></LeagueMenu>
+                <TopPickupGrid playerData={playerData} advancedStats={advancedStats} ></TopPickupGrid>
         </div>
 
     );

@@ -9,11 +9,12 @@ const auth = require('./auth.json')
 const axios = require('axios')
 const dfd = require("danfojs-node")
 const parseString = require('xml2js').parseString;
+const path = require('path');
+
 
 app.use(cors())
 
 const AUTH_HEADER = Buffer.from(`${config.CONSUMER_KEY}:${config.CONSUMER_SECRET}`).toString(`base64`);
-const AUTH_FILE = "/Users/arajkumar/Desktop/fantasy-streaming-application/fantasy-streaming-tool/src/auth.json"
 const BASE_URL = "https://fantasysports.yahooapis.com/fantasy/v2";
 
 app.get('/', async (req, res) => {
@@ -28,6 +29,8 @@ function writeToFile(data, file, flag) {
   fs.writeFile(file, data, { flag }, (err) => {
     if (err) {
       console.error(`Error in writing to ${file}: ${err}`);
+    }else{
+      console.log("Success! Wrote to: "+ file)
     }
   });
   return 1;
@@ -70,7 +73,9 @@ async function makeAPIrequest(url) {
     if (err.response.data && err.response.data.error && err.response.data.error.description && err.response.data.error.description.includes("token_expired")) {
       const newToken = await refreshAuthorizationToken(auth.refresh_token);
       if (newToken && newToken.data && newToken.data.access_token) {
-        writeToFile(JSON.stringify(newToken.data), AUTH_FILE, "w");
+        const jsonPath = path.join(__dirname, '..', 'src','auth.json');
+        console.log(jsonPath)
+        writeToFile(JSON.stringify(newToken.data), jsonPath, "w");
         return makeAPIrequest(url, newToken.data.access_token, newToken.data.refresh_token);
       }
     }
@@ -105,7 +110,7 @@ app.get('/authorize', async (request, res) => {
 }
 )
 
-app.get('/getAdvancedMatchupStats/:playerList/:startDate/:endDate/:closest_stat', async (request, res) => {
+app.get('/getAdvancedMatchupStats/:playerList/:startDate/:endDate/:closest_stat/:primary_positions', async (request, res) => {
 
   function convertDate(date_list) {
     let months = ["jan", "feb", "mar", "apr", "may", "jun", "jul", "aug", "sep", "oct", "nov", "dec"];
@@ -150,12 +155,13 @@ app.get('/getAdvancedMatchupStats/:playerList/:startDate/:endDate/:closest_stat'
 
   let team_abbrevs = request.params.playerList.split(',')
   team_abbrevs.pop()
+  let primary_positions = request.params.primary_positions.split(',')
+  primary_positions.pop()
   const startDate_list = request.params.startDate.split(' ')
   const endDate_list = request.params.endDate.split(' ')
   const startDate = await convertDate(startDate_list)
   const endDate = await convertDate(endDate_list)
   const closest_stat = request.params.closest_stat;
-
   async function requestToBallDontLieAPI(url) {
     let response;
     try {
@@ -176,15 +182,32 @@ app.get('/getAdvancedMatchupStats/:playerList/:startDate/:endDate/:closest_stat'
   for (let i = 0; i < team_abbrevs.length; i++) {
     team_ids.push(team_id_mappings[team_abbrevs[i].toUpperCase()])
   }
-  const upcoming_games = await requestToBallDontLieAPI(`https://www.balldontlie.io/api/v1/games?seasons[]=2020&team_ids[]=${team_ids[0]}&per_page=100&start_date=${startDate}&end_date=${endDate}`)
-  const matchup_ids = []
-  for (let i = 0; i < upcoming_games.data.data.length; i++) {
-    let game = upcoming_games.data.data[i];
-    let opponent_id = game.home_team.id != team_ids[0] ? game.home_team.id : game.visitor_team.id
-    matchup_ids.push(opponent_id)
+
+  let team_ids_query = ''
+  for (let i = 0; i < team_ids.length; i++) {
+    team_ids_query += `&team_ids[]=${team_ids[i]}`
   }
 
-  async function getStatByPosition(matchup_id, closest_stat) {
+  const upcoming_games = await requestToBallDontLieAPI(`https://www.balldontlie.io/api/v1/games?seasons[]=2020${team_ids_query}&per_page=81&start_date=${startDate}&end_date=${endDate}`)
+  const matchup_ids_total = []
+  let matchup_ids = []
+
+  for (let i = 0; i < team_ids.length; i++) {
+    for (let j = 0; j < upcoming_games.data.data.length; j++) {
+      let game = upcoming_games.data.data[j];
+      if (game.home_team.id != team_ids[i] && game.visitor_team.id != team_ids[i]) {
+        continue;
+      }
+      else {
+        let opponent_id = game.home_team.id != team_ids[i] ? game.home_team.id : game.visitor_team.id
+        matchup_ids.push(opponent_id)
+      }
+    }
+    matchup_ids_total.push(matchup_ids)
+    matchup_ids = []
+  }
+
+  async function getStatByPosition(matchup_id, closest_stat, primary_position) {
 
     const stat_mappings = {
       '10': 'Threes',
@@ -195,49 +218,62 @@ app.get('/getAdvancedMatchupStats/:playerList/:startDate/:endDate/:closest_stat'
       '18': 'Blocks',
       '19': 'Turnovers'
     }
-    let stat_against_defense={
-      team:'',
-      stat_category:'',
-      stat_total:''
+
+    const custom_abbrev_mappings = {
+      'OKL':21,
+      'NYK':20,
+      'BRO':3,
+
     }
 
     const stat_category = stat_mappings[closest_stat]
 
     const value1 = dfd.read_csv("scraped_data/defense_vs_position.csv")
       .then(df => {
-        let stat_against_defense = {};
         df.sort_values({ by: stat_category, inplace: true })
-        df.print()
         let grp = df.groupby(["Position"])
-        let grp2 = grp.get_groups(["SF"])
+        let grp2 = grp.get_groups([primary_position])
         let grp3 = grp2.groupby(["Team"])
         const team_abbrev = Object.keys(team_id_mappings).find(key => team_id_mappings[key] === matchup_id);
-        let grp4 = grp3.get_groups([team_abbrev])
+        let grp4;
+        grp4 = grp3.get_groups([team_abbrev])
+        if(grp4 === undefined)
+        {
+          const team_abbrev = Object.keys(custom_abbrev_mappings).find(key => custom_abbrev_mappings[key] === matchup_id);
+          grp4 = grp3.get_groups([team_abbrev])
+        }
+
 
         const value2 = grp4.to_json()
-        .then((json) => {
-          const json_obj = JSON.parse(json)
-          stat_against_defense['team'] = team_abbrev;
-          stat_against_defense['stat_category'] = stat_category;
-          stat_against_defense['stat_total'] = json_obj[0][stat_category]
-          return stat_against_defense
-        }
-        )
+          .then((json) => {
+            const json_obj = JSON.parse(json)
+            const stat_against_defense = {
+              opponent_team: team_abbrev,
+              stat_category: stat_category,
+              primary_position: primary_position,
+              stat_total: json_obj[0][stat_category]
+            }
+            return stat_against_defense
+          }
+          )
         return value2;
       }
       )
-      return value1;
+    return value1;
   }
 
+  let stat_objects_total = []
   let stat_objects = []
-  for await (let i of matchup_ids) {
-    const stat_obj = await getStatByPosition(i, closest_stat)
-    stat_objects.push(stat_obj)
+  for (let i = 0; i < matchup_ids_total.length; i++) {
+    for await (let matchup_id of matchup_ids_total[i]) {
+      const stat_obj = await getStatByPosition(matchup_id, closest_stat,primary_positions[i])
+      stat_objects.push(stat_obj)
+    }
+    stat_objects_total.push(stat_objects)
+    stat_objects = []
   }
-  console.log(stat_objects)
-
-
-
+  console.log(stat_objects_total)
+  res.status(200).send(stat_objects_total)
 })
 
 
@@ -246,10 +282,11 @@ app.get('/setup', async (request, res) => {
   // Add retries for request to evade network errors
   for (let i = 1; i <= 10; i++) {
     response = await makeAPIrequest(`${BASE_URL}/users;use_login=1//games;game_key={402}/leagues`);
+    console.log(response.status)
     if (response.status === 200)
       break;
     else
-      setTimeout(1000 * i)
+      setTimeout(1000)
   }
   res.status(200).send(response.data)
 }
@@ -392,7 +429,7 @@ app.get('/extractPlayers/:league_keyposition', async (request, res) => {
 }
 )
 
-const port = 5000;
+const port = 5000 || process.env.PORT;
 
 app.listen(port, () => {
   console.log(`Server running at port ${port}`);

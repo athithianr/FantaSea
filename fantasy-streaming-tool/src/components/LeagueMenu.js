@@ -8,8 +8,8 @@ import "react-datepicker/dist/react-datepicker.css";
 const axios = require('axios')
 let leagues;
 let league_key;
-
-const LeagueMenu = ({ sendPlayerData }) => {
+const HOST = `https://fantasea.herokuapp:${process.env.PORT}`
+const LeagueMenu = ({ sendPlayerData,sendAdvancedStats }) => {
     const [matchupData, sendMatchupData] = useState('')
     var parser = new DOMParser();
     let league_list = [];
@@ -35,15 +35,17 @@ const LeagueMenu = ({ sendPlayerData }) => {
     function handleDropdownSelections() {
         let leagueSelected = document.getElementById("leagues").value;
         let positionSelected = document.getElementById("position").value;
-        console.log(startDate)
-        console.log(endDate)
+        
+        if(endDate < startDate)
+            console.log("Please enter a valid date range!")
+
         for (let i = 0; i < leagues.getElementsByTagName("league").length; i++) {
             const league = leagues.getElementsByTagName("league")[i]
             if (league.getElementsByTagName("name")[0].innerHTML == leagueSelected) {
                 league_key = league.getElementsByTagName("league_key")[0].innerHTML
             }
         }
-        axios.get(`http://localhost:5000/extractPlayers/${league_key},${positionSelected}`)
+        axios.get(`${HOST}/extractPlayers/${league_key},${positionSelected}`)
             .then(res => {
                 const sendList = []
                 const sendPlayerList = []
@@ -60,19 +62,21 @@ const LeagueMenu = ({ sendPlayerData }) => {
                 sendPlayerData(sendPlayerList)
                 sendMatchupData(sendList)
                 let teams = ''
+                let primary_positions = ''
                 for (let i = 0; i < res.data.players.length; i++) {
+                    primary_positions += (res.data.players[i].primary_position + ',')
                     teams += (res.data.players[i].editorial_team_abbr + ',')
                 }
-                axios.get(`http://localhost:5000/getAdvancedMatchupStats/${teams}/${startDate}/${endDate}/${matchup_differentials[0][0]}`)
+                axios.get(`${HOST}/getAdvancedMatchupStats/${teams}/${startDate}/${endDate}/${matchup_differentials[0][0]}/${primary_positions}`)
                     .then(response => {
-                        console.log(response)
+                        sendAdvancedStats(response.data)
                     })
             }).catch((err) => console.log(err))
 
     }
 
     function getLeagueData() {
-        axios.get(`http://localhost:5000/setup`)
+        axios.get(`${HOST}/setup`)
             .then(res => {
                 let xmlDoc = parser.parseFromString(res.data, "text/xml");
                 const root = xmlDoc.documentElement
