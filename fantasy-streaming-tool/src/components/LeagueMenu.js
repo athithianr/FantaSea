@@ -8,7 +8,6 @@ import "react-datepicker/dist/react-datepicker.css";
 const axios = require('axios')
 let leagues;
 let league_key;
-const HOST = `https://fantasea.herokuapp:${process.env.PORT}`
 const LeagueMenu = ({ sendPlayerData,sendAdvancedStats }) => {
     const [matchupData, sendMatchupData] = useState('')
     var parser = new DOMParser();
@@ -45,7 +44,7 @@ const LeagueMenu = ({ sendPlayerData,sendAdvancedStats }) => {
                 league_key = league.getElementsByTagName("league_key")[0].innerHTML
             }
         }
-        axios.get(`${HOST}/extractPlayers/${league_key},${positionSelected}`)
+        axios.get(`/api/extractPlayers/${league_key},${positionSelected}`)
             .then(res => {
                 const sendList = []
                 const sendPlayerList = []
@@ -67,7 +66,7 @@ const LeagueMenu = ({ sendPlayerData,sendAdvancedStats }) => {
                     primary_positions += (res.data.players[i].primary_position + ',')
                     teams += (res.data.players[i].editorial_team_abbr + ',')
                 }
-                axios.get(`${HOST}/getAdvancedMatchupStats/${teams}/${startDate}/${endDate}/${matchup_differentials[0][0]}/${primary_positions}`)
+                axios.get(`/api/getAdvancedMatchupStats/${teams}/${startDate}/${endDate}/${matchup_differentials[0][0]}/${primary_positions}`)
                     .then(response => {
                         sendAdvancedStats(response.data)
                     })
@@ -76,7 +75,7 @@ const LeagueMenu = ({ sendPlayerData,sendAdvancedStats }) => {
     }
 
     function getLeagueData() {
-        axios.get(`${HOST}/setup`)
+        axios.get('/api/setup')
             .then(res => {
                 let xmlDoc = parser.parseFromString(res.data, "text/xml");
                 const root = xmlDoc.documentElement

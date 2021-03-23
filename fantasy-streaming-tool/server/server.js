@@ -1,5 +1,4 @@
 const express = require('express')
-const app = express()
 const cors = require('cors')
 const qs = require('qs')
 const config = require('./conf')
@@ -11,15 +10,14 @@ const dfd = require("danfojs-node")
 const parseString = require('xml2js').parseString;
 const path = require('path');
 
+const app = express()
 
+//middleware
+app.use(express.static(path.join(__dirname, "..", "build")));
 app.use(cors())
 
 const AUTH_HEADER = Buffer.from(`${config.CONSUMER_KEY}:${config.CONSUMER_SECRET}`).toString(`base64`);
 const BASE_URL = "https://fantasysports.yahooapis.com/fantasy/v2";
-
-app.get('/', async (req, res) => {
-  res.status(200).send("Hello!")
-});
 
 //write to external file
 function writeToFile(data, file, flag) {
@@ -73,7 +71,7 @@ async function makeAPIrequest(url) {
     if (err.response.data && err.response.data.error && err.response.data.error.description && err.response.data.error.description.includes("token_expired")) {
       const newToken = await refreshAuthorizationToken(auth.refresh_token);
       if (newToken && newToken.data && newToken.data.access_token) {
-        const jsonPath = path.join(__dirname, '..', 'src','auth.json');
+        const jsonPath = path.join(__dirname, 'auth.json');
         console.log(jsonPath)
         writeToFile(JSON.stringify(newToken.data), jsonPath, "w");
         return makeAPIrequest(url, newToken.data.access_token, newToken.data.refresh_token);
@@ -87,7 +85,7 @@ async function makeAPIrequest(url) {
 }
 
 
-app.get('/authorize', async (request, res) => {
+app.get('/api/authorize', async (request, res) => {
   const url = "https://api.login.yahoo.com/oauth2/get_token"
   const options =
   {
@@ -110,7 +108,7 @@ app.get('/authorize', async (request, res) => {
 }
 )
 
-app.get('/getAdvancedMatchupStats/:playerList/:startDate/:endDate/:closest_stat/:primary_positions', async (request, res) => {
+app.get('/api/getAdvancedMatchupStats/:playerList/:startDate/:endDate/:closest_stat/:primary_positions', async (request, res) => {
 
   function convertDate(date_list) {
     let months = ["jan", "feb", "mar", "apr", "may", "jun", "jul", "aug", "sep", "oct", "nov", "dec"];
@@ -228,7 +226,7 @@ app.get('/getAdvancedMatchupStats/:playerList/:startDate/:endDate/:closest_stat/
 
     const stat_category = stat_mappings[closest_stat]
 
-    const value1 = dfd.read_csv("scraped_data/defense_vs_position.csv")
+    const value1 = dfd.read_csv("../scraped_data/defense_vs_position.csv")
       .then(df => {
         df.sort_values({ by: stat_category, inplace: true })
         let grp = df.groupby(["Position"])
@@ -277,11 +275,13 @@ app.get('/getAdvancedMatchupStats/:playerList/:startDate/:endDate/:closest_stat/
 })
 
 
-app.get('/setup', async (request, res) => {
+app.get('/api/setup', async (request, res) => {
+  console.log("Hello")
   let response;
   // Add retries for request to evade network errors
   for (let i = 1; i <= 10; i++) {
     response = await makeAPIrequest(`${BASE_URL}/users;use_login=1//games;game_key={402}/leagues`);
+
     console.log(response.status)
     if (response.status === 200)
       break;
@@ -311,7 +311,7 @@ async function getTeamKey(league_key) {
   return team_key;
 }
 
-app.get('/extractPlayers/:league_keyposition', async (request, res) => {
+app.get('/api/extractPlayers/:league_keyposition', async (request, res) => {
 
   const league_key_position = request.params.league_keyposition.split(',');
   const league_key = league_key_position[0];
@@ -429,7 +429,14 @@ app.get('/extractPlayers/:league_keyposition', async (request, res) => {
 }
 )
 
-const port = 5000 || process.env.PORT;
+// The "catchall" handler: for any request that doesn't
+// match one above, send back React's index.html file.
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, "..", "build", "index.html"));
+});
+
+
+const port = process.env.PORT || 5000;
 
 app.listen(port, () => {
   console.log(`Server running at port ${port}`);
