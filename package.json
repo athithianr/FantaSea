@@ -6,7 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "nodemon server.js",
-    "heroku-postbuild": "cd .. && npm install && npm run build"
+    "heroku-postbuild": "cd fantasy-streaming-tool && npm install && npm run build"
   },
   "keywords": [],
   "author": "",

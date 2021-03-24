@@ -13,7 +13,7 @@ const path = require('path');
 const app = express()
 
 //middleware
-app.use(express.static(path.join(__dirname, "..", "build")));
+app.use(express.static(path.join(__dirname, "fantasy-streaming-tool", "build")));
 app.use(cors())
 
 const AUTH_HEADER = Buffer.from(`${config.CONSUMER_KEY}:${config.CONSUMER_SECRET}`).toString(`base64`);
@@ -226,7 +226,7 @@ app.get('/api/getAdvancedMatchupStats/:playerList/:startDate/:endDate/:closest_s
 
     const stat_category = stat_mappings[closest_stat]
 
-    const value1 = dfd.read_csv("../scraped_data/defense_vs_position.csv")
+    const value1 = dfd.read_csv("fantasy-streaming-tool/scraped_data/defense_vs_position.csv")
       .then(df => {
         df.sort_values({ by: stat_category, inplace: true })
         let grp = df.groupby(["Position"])
@@ -319,7 +319,7 @@ app.get('/api/extractPlayers/:league_keyposition', async (request, res) => {
 
   const team_key = await getTeamKey(league_key);
 
-  const matchup_response = await makeAPIrequest(`${BASE_URL}/team/${team_key}/matchups;weeks=12`)
+  const matchup_response = await makeAPIrequest(`${BASE_URL}/team/${team_key}/matchups;weeks=13`)
   parseMatchup(matchup_response.data)
 
   function Team() {
@@ -432,7 +432,7 @@ app.get('/api/extractPlayers/:league_keyposition', async (request, res) => {
 // The "catchall" handler: for any request that doesn't
 // match one above, send back React's index.html file.
 app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, "..", "build", "index.html"));
+  res.sendFile(path.join(__dirname, "fantasy-streaming-tool", "build", "index.html"));
 });
 
 
