@@ -74,7 +74,7 @@ const TopPickupGrid = ({ playerData, advancedStats }) => {
 
     return (
         <section className="playerGrid">
-            <div className="container">
+            {/* <div className="container"> */}
                 <h2 className="top-player-grid text-center my-1">Top Player Pickups</h2>
                 <div className="player-grid text-center">
                     <div className="player-card">
@@ -90,7 +90,7 @@ const TopPickupGrid = ({ playerData, advancedStats }) => {
                                 <AccordionItem>
                                     <AccordionItemHeading>
                                         <AccordionItemButton>
-                                            Show Matchup Stats
+                                        Show Upcoming Matchup Stats
                                         </AccordionItemButton>
                                     </AccordionItemHeading>
                                     <AccordionItemPanel>
@@ -115,7 +115,7 @@ const TopPickupGrid = ({ playerData, advancedStats }) => {
                                 <AccordionItem>
                                     <AccordionItemHeading>
                                         <AccordionItemButton>
-                                            Show Matchup Stats
+                                        Show Upcoming Matchup Stats
                                         </AccordionItemButton>
                                     </AccordionItemHeading>
                                     <AccordionItemPanel>
@@ -140,7 +140,7 @@ const TopPickupGrid = ({ playerData, advancedStats }) => {
                                 <AccordionItem>
                                     <AccordionItemHeading>
                                         <AccordionItemButton>
-                                            Show Matchup Stats
+                                        Show Upcoming Matchup Stats
                                         </AccordionItemButton>
                                     </AccordionItemHeading>
                                     <AccordionItemPanel>
@@ -165,7 +165,7 @@ const TopPickupGrid = ({ playerData, advancedStats }) => {
                                 <AccordionItem>
                                     <AccordionItemHeading>
                                         <AccordionItemButton>
-                                            Show Matchup Stats
+                                            Show Upcoming Matchup Stats
                                         </AccordionItemButton>
                                     </AccordionItemHeading>
                                     <AccordionItemPanel>
@@ -190,7 +190,7 @@ const TopPickupGrid = ({ playerData, advancedStats }) => {
                                 <AccordionItem>
                                     <AccordionItemHeading>
                                         <AccordionItemButton>
-                                            Show Matchup Stats
+                                        Show Upcoming Matchup Stats
                                         </AccordionItemButton>
                                     </AccordionItemHeading>
                                     <AccordionItemPanel>
@@ -203,7 +203,7 @@ const TopPickupGrid = ({ playerData, advancedStats }) => {
                         </div>
                     </div>
                 </div>
-            </div>
+            {/* </div> */}
         </section>
     );
 }

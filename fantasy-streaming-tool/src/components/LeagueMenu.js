@@ -8,7 +8,7 @@ import "react-datepicker/dist/react-datepicker.css";
 const axios = require('axios')
 let leagues;
 let league_key;
-const LeagueMenu = ({ sendPlayerData,sendAdvancedStats }) => {
+const LeagueMenu = ({ sendPlayerData, sendAdvancedStats }) => {
     const [matchupData, sendMatchupData] = useState('')
     var parser = new DOMParser();
     let league_list = [];
@@ -34,8 +34,8 @@ const LeagueMenu = ({ sendPlayerData,sendAdvancedStats }) => {
     function handleDropdownSelections() {
         let leagueSelected = document.getElementById("leagues").value;
         let positionSelected = document.getElementById("position").value;
-        
-        if(endDate < startDate)
+
+        if (endDate < startDate)
             console.log("Please enter a valid date range!")
 
         for (let i = 0; i < leagues.getElementsByTagName("league").length; i++) {
@@ -102,62 +102,64 @@ const LeagueMenu = ({ sendPlayerData,sendAdvancedStats }) => {
         <ContentLoader
             isLoading={isLoading}>
             <section className="dropdown-menu">
-                <div className="container text-center">
-                    <div className="flex text-center">
-                        <div className="item">
-                            <h2 className="dropdown-heading text-center my-1">Filters</h2>
-                            <div className="grid grid-2 text-center my-4">
-                                <div className="drop_down">
-                                    <label for="leagues">Choose a League: </label>
-                                    <br></br>
-                                    <select name="leagues" id="leagues"></select>
-                                </div>
-                                <div className="drop_down">
-                                    <label for="week">Week </label>
-                                    <br></br>
-                                    <select name="week" id="weeks">
-                                        <option value="select">Latest week</option>
-                                    </select>
-                                </div>
-                                <div className="drop_down">
-                                    <label for="date-range">Select a date range: </label>
-                                    <br></br>
-                                    <DatePicker
-                                        selected={startDate}
-                                        onChange={date => setStartDate(date)}
-                                        selectsStart
-                                        startDate={startDate}
-                                        endDate={endDate}
-                                    />
-                                    <DatePicker
-                                        selected={endDate}
-                                        onChange={date => setEndDate(date)}
-                                        selectsEnd
-                                        startDate={startDate}
-                                        endDate={endDate}
-                                        minDate={startDate}
-                                    />
-                                </div>
-                                <div className="drop_down">
-                                    <label for="positions">Position: </label>
-                                    <br></br>
-                                    <select name="select-position" id="position">
-                                        <option value="select">All Players</option>
-                                        <option value="pg">PG</option>
-                                        <option value="sg">SG</option>
-                                        <option value="sf">SF</option>
-                                        <option value="pf">PF</option>
-                                        <option value="c">C</option>
-                                    </select>
-                                </div>
+                {/* <div className="container text-center"> */}
+                <div className="flex text-center">
+                    <div className="item">
+                        <h2 className="dropdown-heading text-center my-1">Filters</h2>
+                        <div className="grid grid-2 text-center my-4">
+                            <div className="drop_down">
+                                <label for="leagues">Choose a League: </label>
+                                <br></br>
+                                <select name="leagues" id="leagues"></select>
+                            </div>
+                            <div className="drop_down">
+                                <label for="week">Week </label>
+                                <br></br>
+                                <select name="week" id="weeks">
+                                    <option value="select">Latest week</option>
+                                </select>
+                            </div>
+                            <div className="drop_down">
+                                <label for="date-range">Select a date range: </label>
+                                <br></br>
+                                <DatePicker
+                                    selected={startDate}
+                                    onChange={date => setStartDate(date)}
+                                    selectsStart
+                                    startDate={startDate}
+                                    endDate={endDate}
+                                />
+                                <DatePicker
+                                    selected={endDate}
+                                    onChange={date => setEndDate(date)}
+                                    selectsEnd
+                                    startDate={startDate}
+                                    endDate={endDate}
+                                    minDate={startDate}
+                                />
+                            </div>
+                            <div className="drop_down">
+                                <label for="positions">Position: </label>
+                                <br></br>
+                                <select name="select-position" id="position">
+                                    <option value="select">All Players</option>
+                                    <option value="pg">PG</option>
+                                    <option value="sg">SG</option>
+                                    <option value="sf">SF</option>
+                                    <option value="pf">PF</option>
+                                    <option value="c">C</option>
+                                </select>
                             </div>
                         </div>
-                        <div className="item">
-                            <MatchupInfo matchupData={matchupData}></MatchupInfo>
-                        </div>
                     </div>
-                    <button className="submit-btn" onClick={handleDropdownSelections}>Submit</button>
+                    <div className="item">
+                        <MatchupInfo matchupData={matchupData}></MatchupInfo>
+                    </div>
                 </div>
+                <div className="container text-center">
+                <button className="submit-btn text-center" onClick={handleDropdownSelections}>Submit</button>
+                </div>
+                {/* </div> */}
             </section >
         </ContentLoader>
     )
