@@ -57,12 +57,12 @@ const SignIn = () => {
             <section class="sign-in-body">
                 <div class="container">
                     <div class="text-button">
-                    <div class="showcase-text">
-                        <h2>A comprehensive Yahoo fantasy sports tool for optimizing player pickups.</h2>
-                    </div>
-                    <div className="signInButton">
-                        <button class="yahoo-button" onClick={signInWithYahoo}>Sign in with Yahoo</button>
-                    </div>
+                        <div class="showcase-text">
+                            <h2>A comprehensive Yahoo fantasy sports tool for optimizing player pickups.</h2>
+                        </div>
+                        <div className="signInButton">
+                            <button class="yahoo-button" onClick={signInWithYahoo}>Sign in with Yahoo</button>
+                        </div>
                     </div>
                 </div>
             </section>

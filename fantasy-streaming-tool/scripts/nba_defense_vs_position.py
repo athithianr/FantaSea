@@ -1,8 +1,8 @@
 import requests
 import pandas as pd
-import numpy as np
 from bs4 import BeautifulSoup
 import re
+import os
 
 url = "https://hashtagbasketball.com/nba-defense-vs-position"
 
@@ -61,7 +61,9 @@ output=pd.DataFrame({'Position':positions,'Points':points,'Team':teams, 'FG%':fg
 new_order = ['Position','Points','Team','FG%','FT%','3PM','Rebounds','Assists','Steals','Blocks','Turnovers']
 output = output.reindex(new_order, axis=1)
 
-
-output.to_csv('/Users/arajkumar/Desktop/fantasy-streaming-application/fantasy-streaming-tool/scraped_data/defense_vs_position.csv')
+file_dir = os.path.dirname(os.path.abspath(__file__))
+file_path = os.path.join(file_dir, '..', 'scraped_data','defense_vs_position.csv')
+output.to_csv(file_path)
+print(output)
 
 

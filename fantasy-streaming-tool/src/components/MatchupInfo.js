@@ -34,7 +34,7 @@ const MatchupInfo = ({ matchupData }) => {
             <h2 className="dropdown-heading text-center my-1">Matchup Differentials</h2>
             <ContentLoader style={{ 'height': '268.38px' }} isLoading={typeof matchupData != "object"}>
                 <div style={{ 'border': '1px solid #aaa', 'border-radius': '.5em', 'height': '100%' }}>
-                    <h3 style={{padding:'10px'}}>Opponent: {opponent}</h3>
+                    <h3 style={{ padding: '10px' }}>Opponent: {opponent}</h3>
                     <div className="text-center" id="matchup_diff" style={{ 'line-height': '15px' }}>
                     </div>
                 </div>

@@ -157,7 +157,7 @@ const LeagueMenu = ({ sendPlayerData, sendAdvancedStats }) => {
                     </div>
                 </div>
                 <div className="container text-center">
-                <button className="submit-btn text-center" onClick={handleDropdownSelections}>Submit</button>
+                    <button className="submit-btn text-center" onClick={handleDropdownSelections}>Submit</button>
                 </div>
                 {/* </div> */}
             </section >

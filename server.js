@@ -12,14 +12,14 @@ const path = require('path');
 
 const app = express()
 
-//middleware
+//Application Middleware
 app.use(express.static(path.join(__dirname, "fantasy-streaming-tool", "build")));
 app.use(cors())
 
 const AUTH_HEADER = Buffer.from(`${config.CONSUMER_KEY}:${config.CONSUMER_SECRET}`).toString(`base64`);
 const BASE_URL = "https://fantasysports.yahooapis.com/fantasy/v2";
 
-//write to external file
+//Write to external file
 function writeToFile(data, file, flag) {
   if (flag === null) {
     flag = `a`;
@@ -27,8 +27,8 @@ function writeToFile(data, file, flag) {
   fs.writeFile(file, data, { flag }, (err) => {
     if (err) {
       console.error(`Error in writing to ${file}: ${err}`);
-    }else{
-      console.log("Success! Wrote to: "+ file)
+    } else {
+      console.log("Success! Wrote to: " + file)
     }
   });
   return 1;
@@ -53,7 +53,7 @@ function refreshAuthorizationToken(token) {
   });
 }
 
-//general purpose function to make API requests
+//Function to make requests to Yahoo fantasy sports API
 async function makeAPIrequest(url) {
   let response;
   try {
@@ -72,7 +72,6 @@ async function makeAPIrequest(url) {
       const newToken = await refreshAuthorizationToken(auth.refresh_token);
       if (newToken && newToken.data && newToken.data.access_token) {
         const jsonPath = path.join(__dirname, 'auth.json');
-        console.log(jsonPath)
         writeToFile(JSON.stringify(newToken.data), jsonPath, "w");
         return makeAPIrequest(url, newToken.data.access_token, newToken.data.refresh_token);
       }
@@ -84,29 +83,28 @@ async function makeAPIrequest(url) {
   }
 }
 
-
-app.get('/api/authorize', async (request, res) => {
-  const url = "https://api.login.yahoo.com/oauth2/get_token"
-  const options =
-  {
-    method: 'POST',
-    headers: {
-      'Authorization': `Basic ${AUTH_HEADER}`,
-      'Content-Type': 'application/x-www-form-urlencoded',
-    },
-    body: qs.stringify
-      ({
-        client_id: config.CONSUMER_KEY,
-        client_secret: config.CONSUMER_SECRET,
-        redirect_uri: 'oob',
-        code: conf.YAHOO_AUTH_CODE,
-        grant_type: 'authorization_code'
-      }),
-  }
-  const fetch_res = await fetch(url, options)
-  const json = await fetch_res.json()
-}
-)
+// app.get('/api/authorize', async (request, res) => {
+//   const url = "https://api.login.yahoo.com/oauth2/get_token"
+//   const options =
+//   {
+//     method: 'POST',
+//     headers: {
+//       'Authorization': `Basic ${AUTH_HEADER}`,
+//       'Content-Type': 'application/x-www-form-urlencoded',
+//     },
+//     body: qs.stringify
+//       ({
+//         client_id: config.CONSUMER_KEY,
+//         client_secret: config.CONSUMER_SECRET,
+//         redirect_uri: 'oob',
+//         code: conf.YAHOO_AUTH_CODE,
+//         grant_type: 'authorization_code'
+//       }),
+//   }
+//   const fetch_res = await fetch(url, options)
+//   const json = await fetch_res.json()
+// }
+// )
 
 app.get('/api/getAdvancedMatchupStats/:playerList/:startDate/:endDate/:closest_stat/:primary_positions', async (request, res) => {
 
@@ -218,9 +216,9 @@ app.get('/api/getAdvancedMatchupStats/:playerList/:startDate/:endDate/:closest_s
     }
 
     const custom_abbrev_mappings = {
-      'OKL':21,
-      'NYK':20,
-      'BRO':3,
+      'OKL': 21,
+      'NYK': 20,
+      'BRO': 3,
 
     }
 
@@ -235,8 +233,7 @@ app.get('/api/getAdvancedMatchupStats/:playerList/:startDate/:endDate/:closest_s
         const team_abbrev = Object.keys(team_id_mappings).find(key => team_id_mappings[key] === matchup_id);
         let grp4;
         grp4 = grp3.get_groups([team_abbrev])
-        if(grp4 === undefined)
-        {
+        if (grp4 === undefined) {
           const team_abbrev = Object.keys(custom_abbrev_mappings).find(key => custom_abbrev_mappings[key] === matchup_id);
           grp4 = grp3.get_groups([team_abbrev])
         }
@@ -264,29 +261,27 @@ app.get('/api/getAdvancedMatchupStats/:playerList/:startDate/:endDate/:closest_s
   let stat_objects = []
   for (let i = 0; i < matchup_ids_total.length; i++) {
     for await (let matchup_id of matchup_ids_total[i]) {
-      const stat_obj = await getStatByPosition(matchup_id, closest_stat,primary_positions[i])
+      const stat_obj = await getStatByPosition(matchup_id, closest_stat, primary_positions[i])
       stat_objects.push(stat_obj)
     }
     stat_objects_total.push(stat_objects)
     stat_objects = []
   }
-  console.log(stat_objects_total)
   res.status(200).send(stat_objects_total)
 })
 
 
 app.get('/api/setup', async (request, res) => {
-  console.log("Hello")
   let response;
   // Add retries for request to evade network errors
   for (let i = 1; i <= 10; i++) {
     response = await makeAPIrequest(`${BASE_URL}/users;use_login=1//games;game_key={402}/leagues`);
-
-    console.log(response.status)
-    if (response.status === 200)
+    if (response.status === 200) {
       break;
-    else
+    }
+    else {
       setTimeout(1000)
+    }
   }
   res.status(200).send(response.data)
 }
@@ -324,7 +319,7 @@ app.get('/api/extractPlayers/:league_keyposition', async (request, res) => {
 
   function Team() {
     this.name = '',
-      this.team_key = '',
+      this.key = '',
       this.stats = [];
   }
 
@@ -355,9 +350,9 @@ app.get('/api/extractPlayers/:league_keyposition', async (request, res) => {
         teams_data = result.fantasy_content.team[0].matchups[0].matchup[0].teams[0];
         const stat_winners = result.fantasy_content.team[0].matchups[0].matchup[0].stat_winners[0].stat_winner
         team1.name = teams_data.team[0].name[0]
-        team1.team_key = teams_data.team[0].team_key[0]
+        team1.key = teams_data.team[0].team_key[0]
         team2.name = teams_data.team[1].name[0]
-        team2.team_key = teams_data.team[1].team_key[0]
+        team2.key = teams_data.team[1].team_key[0]
         team1_stats = teams_data.team[0].team_stats[0].stats;
         team2_stats = teams_data.team[1].team_stats[0].stats;
         for (let i = 0; i < team1_stats[0].stat.length; i++) {
