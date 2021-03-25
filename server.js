@@ -1,7 +1,6 @@
 const express = require('express')
 const cors = require('cors')
 const qs = require('qs')
-const config = require('./conf')
 const fetch = require('node-fetch')
 const fs = require('fs');
 const auth = require('./auth.json')
@@ -9,6 +8,7 @@ const axios = require('axios')
 const dfd = require("danfojs-node")
 const parseString = require('xml2js').parseString;
 const path = require('path');
+require('dotenv').config()
 
 const app = express()
 
@@ -16,7 +16,7 @@ const app = express()
 app.use(express.static(path.join(__dirname, "fantasy-streaming-tool", "build")));
 app.use(cors())
 
-const AUTH_HEADER = Buffer.from(`${config.CONSUMER_KEY}:${config.CONSUMER_SECRET}`).toString(`base64`);
+const AUTH_HEADER = Buffer.from(`${process.env.CONSUMER_KEY}:${process.env.CONSUMER_SECRET}`).toString(`base64`);
 const BASE_URL = "https://fantasysports.yahooapis.com/fantasy/v2";
 
 //Write to external file
@@ -270,12 +270,12 @@ app.get('/api/getAdvancedMatchupStats/:playerList/:startDate/:endDate/:closest_s
   res.status(200).send(stat_objects_total)
 })
 
-
 app.get('/api/setup', async (request, res) => {
   let response;
   // Add retries for request to evade network errors
   for (let i = 1; i <= 10; i++) {
     response = await makeAPIrequest(`${BASE_URL}/users;use_login=1//games;game_key={402}/leagues`);
+    console.log(response)
     if (response.status === 200) {
       break;
     }
@@ -284,8 +284,8 @@ app.get('/api/setup', async (request, res) => {
     }
   }
   res.status(200).send(response.data)
-}
-)
+})
+
 async function getTeamKey(league_key) {
   const response = await makeAPIrequest(`${BASE_URL}/users;use_login=1/games;game_keys=nba/teams`)
   let team_key;

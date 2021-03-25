@@ -75,13 +75,12 @@ const TopPickupGrid = ({ playerData, advancedStats }) => {
 
     return (
         <section className="playerGrid">
-            {/* <div className="container"> */}
             <h2 className="top-player-grid text-center my-1">Top Player Pickups</h2>
             <div className="player-grid text-center">
                 <div className="player-card">
-                    <div class="card-header">
-                        <h5 style={{ 'text-align': 'left', 'float': 'left' }}>#1.</h5>
-                        <h4 id="name1" style={{ 'text-align': 'center', 'float': 'center' }}></h4>
+                    <div className="card-header">
+                        <h5 style={{ 'textAlign': 'left', 'float': 'left' }}>#1.</h5>
+                        <h4 id="name1" style={{ 'textAlign': 'center', 'float': 'center' }}></h4>
                         <h5 id="pos1"></h5>
                     </div>
                     <div className="card-body">
@@ -104,9 +103,9 @@ const TopPickupGrid = ({ playerData, advancedStats }) => {
                     </div>
                 </div>
                 <div className="player-card">
-                    <div class="card-header">
-                        <h5 style={{ 'text-align': 'left', 'float': 'left' }}>#2.</h5>
-                        <h4 id="name2" style={{ 'text-align': 'center', 'float': 'center' }}></h4>
+                    <div className="card-header">
+                        <h5 style={{ 'textAlign': 'left', 'float': 'left' }}>#2.</h5>
+                        <h4 id="name2" style={{ 'textAlign': 'center', 'float': 'center' }}></h4>
                         <h5 id="pos2"></h5>
                     </div>
                     <div className="card-body">
@@ -129,9 +128,9 @@ const TopPickupGrid = ({ playerData, advancedStats }) => {
                     </div>
                 </div>
                 <div className="player-card">
-                    <div class="card-header">
-                        <h5 style={{ 'text-align': 'left', 'float': 'left' }}>#3.</h5>
-                        <h4 id="name3" style={{ 'text-align': 'center', 'float': 'center' }}></h4>
+                    <div className="card-header">
+                        <h5 style={{ 'textAlign': 'left', 'float': 'left' }}>#3.</h5>
+                        <h4 id="name3" style={{ 'textAlign': 'center', 'float': 'center' }}></h4>
                         <h5 id="pos3"></h5>
                     </div>
                     <div className="card-body">
@@ -154,9 +153,9 @@ const TopPickupGrid = ({ playerData, advancedStats }) => {
                     </div>
                 </div>
                 <div className="player-card">
-                    <div class="card-header">
-                        <h5 style={{ 'text-align': 'left', 'float': 'left' }}>#4.</h5>
-                        <h4 id="name4" style={{ 'text-align': 'center', 'float': 'center' }}></h4>
+                    <div className="card-header">
+                        <h5 style={{ 'textAlign': 'left', 'float': 'left' }}>#4.</h5>
+                        <h4 id="name4" style={{ 'textAlign': 'center', 'float': 'center' }}></h4>
                         <h5 id="pos4"></h5>
                     </div>
                     <div className="card-body">
@@ -179,9 +178,9 @@ const TopPickupGrid = ({ playerData, advancedStats }) => {
                     </div>
                 </div>
                 <div className="player-card">
-                    <div class="card-header">
-                        <h5 style={{ 'text-align': 'left', 'float': 'left' }}>#5.</h5>
-                        <h4 id="name5" style={{ 'text-align': 'center', 'float': 'center' }}></h4>
+                    <div className="card-header">
+                        <h5 style={{ 'textAlign': 'left', 'float': 'left' }}>#5.</h5>
+                        <h4 id="name5" style={{ 'textAlign': 'center', 'float': 'center' }}></h4>
                         <h5 id="pos5"></h5>
                     </div>
                     <div className="card-body">
@@ -204,7 +203,6 @@ const TopPickupGrid = ({ playerData, advancedStats }) => {
                     </div>
                 </div>
             </div>
-            {/* </div> */}
         </section>
     );
 }

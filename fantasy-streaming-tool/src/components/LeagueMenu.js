@@ -108,19 +108,19 @@ const LeagueMenu = ({ sendPlayerData, sendAdvancedStats }) => {
                         <h2 className="dropdown-heading text-center my-1">Filters</h2>
                         <div className="grid grid-2 text-center my-4">
                             <div className="drop_down">
-                                <label for="leagues">Choose a League: </label>
+                                <label htmlFor="leagues">Choose a League: </label>
                                 <br></br>
                                 <select name="leagues" id="leagues"></select>
                             </div>
                             <div className="drop_down">
-                                <label for="week">Week </label>
+                                <label htmlFor="week">Week </label>
                                 <br></br>
                                 <select name="week" id="weeks">
                                     <option value="select">Latest week</option>
                                 </select>
                             </div>
                             <div className="drop_down">
-                                <label for="date-range">Select a date range: </label>
+                                <label htmlFor="date-range">Select a date range: </label>
                                 <br></br>
                                 <DatePicker
                                     selected={startDate}
@@ -139,7 +139,7 @@ const LeagueMenu = ({ sendPlayerData, sendAdvancedStats }) => {
                                 />
                             </div>
                             <div className="drop_down">
-                                <label for="positions">Position: </label>
+                                <label htmlFor="positions">Position: </label>
                                 <br></br>
                                 <select name="select-position" id="position">
                                     <option value="select">All Players</option>

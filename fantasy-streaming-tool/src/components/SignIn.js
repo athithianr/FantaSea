@@ -26,27 +26,27 @@ const SignIn = () => {
             });
     }
     return (
-        <div class="sign-in-page">
+        <div className="sign-in-page">
             <div className="sign-in-header">
-                <div class="container flex">
-                    <h1 class='logo'>Fanta Sea</h1>
+                <div className="container flex">
+                    <h1 className='logo'>Fanta Sea</h1>
                     <nav>
-                        <div class="modal-icons">
-                            <div class="flex-container">
-                                <div class=" icon-flex">
+                        <div className="modal-icons">
+                            <div className="flex-container">
+                                <div className=" icon-flex">
                                     <a href="https://github.com/athithianr/fantasy-streaming-application" target="_blank" rel="noreferrer">
-                                        <i class="fa fa-github"></i>
+                                        <i className="fa fa-github"></i>
                                     </a>
                                 </div>
-                                <div class=" icon-flex">
+                                <div className=" icon-flex">
                                     <a href="https://github.com/athithianr/fantasy-streaming-application" target="_blank" rel="noreferrer">
-                                        <i class="fa fa-instagram"></i>
+                                        <i className="fa fa-instagram"></i>
                                     </a>
                                 </div>
-                                <div class="icon-flex">
+                                <div className="icon-flex">
                                     <a href="https://github.com/athithianr/fantasy-streaming-application"
                                         target="_blank" rel="noreferrer">
-                                        <i class="fa fa-file"></i>
+                                        <i className="fa fa-file"></i>
                                     </a>
                                 </div>
                             </div>
@@ -54,14 +54,14 @@ const SignIn = () => {
                     </nav>
                 </div>
             </div>
-            <section class="sign-in-body">
-                <div class="container">
-                    <div class="text-button">
-                        <div class="showcase-text">
+            <section className="sign-in-body">
+                <div className="container">
+                    <div className="text-button">
+                        <div className="showcase-text">
                             <h2>A comprehensive Yahoo fantasy sports tool for optimizing player pickups.</h2>
                         </div>
                         <div className="signInButton">
-                            <button class="yahoo-button" onClick={signInWithYahoo}>Sign in with Yahoo</button>
+                            <button className="yahoo-button" onClick={signInWithYahoo}>Sign in with Yahoo</button>
                         </div>
                     </div>
                 </div>

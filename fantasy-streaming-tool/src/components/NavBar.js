@@ -9,8 +9,8 @@ const SignOut = (props) => {
 
 const NavBar = (props) => {
     return (
-        <div class="navbar">
-            <div class="container flex">
+        <div className="navbar">
+            <div className="container flex">
                 <h1 >Fanta Sea</h1>
                 <SignOut auth={props.auth} />
             </div>
