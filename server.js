@@ -271,11 +271,12 @@ app.get('/api/getAdvancedMatchupStats/:playerList/:startDate/:endDate/:closest_s
 })
 
 app.get('/api/setup', async (request, res) => {
+  console.log('/api/setup endpoint hit!')
   let response;
   // Add retries for request to evade network errors
   for (let i = 1; i <= 10; i++) {
     response = await makeAPIrequest(`${BASE_URL}/users;use_login=1//games;game_key={402}/leagues`);
-    console.log(response)
+    // console.log(response)
     if (response.status === 200) {
       break;
     }

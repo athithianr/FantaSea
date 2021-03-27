@@ -102,7 +102,6 @@ const LeagueMenu = ({ sendPlayerData, sendAdvancedStats }) => {
         <ContentLoader
             isLoading={isLoading}>
             <section className="dropdown-menu">
-                {/* <div className="container text-center"> */}
                 <div className="flex text-center">
                     <div className="item">
                         <h2 className="dropdown-heading text-center my-1">Filters</h2>
@@ -159,7 +158,6 @@ const LeagueMenu = ({ sendPlayerData, sendAdvancedStats }) => {
                 <div className="container text-center">
                     <button className="submit-btn text-center" onClick={handleDropdownSelections}>Submit</button>
                 </div>
-                {/* </div> */}
             </section >
         </ContentLoader>
     )
