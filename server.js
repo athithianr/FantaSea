@@ -187,7 +187,6 @@ app.get('/api/getAdvancedMatchupStats/:playerList/:startDate/:endDate/:closest_s
   const upcoming_games = await requestToBallDontLieAPI(`https://www.balldontlie.io/api/v1/games?seasons[]=2020${team_ids_query}&per_page=81&start_date=${startDate}&end_date=${endDate}`)
   const matchup_ids_total = []
   let matchup_ids = []
-
   for (let i = 0; i < team_ids.length; i++) {
     for (let j = 0; j < upcoming_games.data.data.length; j++) {
       let game = upcoming_games.data.data[j];
@@ -206,7 +205,7 @@ app.get('/api/getAdvancedMatchupStats/:playerList/:startDate/:endDate/:closest_s
   async function getStatByPosition(matchup_id, closest_stat, primary_position) {
 
     const stat_mappings = {
-      '10': 'Threes',
+      '10': '3PM',
       '12': 'Points',
       '15': 'Rebounds',
       '16': 'Assists',
@@ -276,7 +275,6 @@ app.get('/api/setup', async (request, res) => {
   // Add retries for request to evade network errors
   for (let i = 1; i <= 10; i++) {
     response = await makeAPIrequest(`${BASE_URL}/users;use_login=1//games;game_key={402}/leagues`);
-    // console.log(response)
     if (response.status === 200) {
       break;
     }

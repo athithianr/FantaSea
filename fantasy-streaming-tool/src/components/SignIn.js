@@ -34,7 +34,7 @@ const SignIn = () => {
             </div>
             <div  className="sign-in-header">
                 <div className="container flex">
-                    <h1 className='logo'>Fanta Sea</h1>
+                    <h1  className='logo'>Fanta Sea</h1>
                     <nav>
                         <div className="modal-icons">
                             <div className="flex-container">
@@ -47,7 +47,7 @@ const SignIn = () => {
                         </div>
                     </nav>
                     <div className="text-button text-center">
-                        <div className="showcase-text text-center">
+                        <div style={{color:'white'}} className="showcase-text text-center">
                             <h2>A comprehensive Yahoo fantasy sports tool for optimizing player pickups.</h2>
                         </div>
                         <div className="signInButton text-center">
