@@ -12,7 +12,7 @@ require('dotenv').config()
 
 const app = express()
 
-//Application Middleware
+//Global Middleware
 app.use(express.static(path.join(__dirname, "fantasy-streaming-tool", "build")));
 app.use(cors())
 
@@ -71,8 +71,7 @@ async function makeAPIrequest(url) {
     if (err.response.data && err.response.data.error && err.response.data.error.description && err.response.data.error.description.includes("token_expired")) {
       const newToken = await refreshAuthorizationToken(auth.refresh_token);
       if (newToken && newToken.data && newToken.data.access_token) {
-        const jsonPath = path.join(__dirname, 'auth.json');
-        writeToFile(JSON.stringify(newToken.data), jsonPath, "w");
+        writeToFile(JSON.stringify(newToken.data), path.join(__dirname, 'auth.json'), "w");
         return makeAPIrequest(url, newToken.data.access_token, newToken.data.refresh_token);
       }
     }
@@ -109,11 +108,19 @@ async function makeAPIrequest(url) {
 app.get('/api/getAdvancedMatchupStats/:playerList/:startDate/:endDate/:closest_stat/:primary_positions', async (request, res) => {
 
   function convertDate(date_list) {
-    let months = ["jan", "feb", "mar", "apr", "may", "jun", "jul", "aug", "sep", "oct", "nov", "dec"];
-
-    month1 = date_list[1].toLowerCase();
-    month1 = months.indexOf(month1) + 1;
-    return `${date_list[3]}-${month1}-${date_list[2]}`
+    /*
+    Gets a date in the following list format
+    [
+      'Wed',      'Mar',
+      '31',       '2021',
+      '13:17:56', 'GMT-0400',
+      '(Eastern', 'Daylight',
+      'Time)'
+    ]
+    */
+    const MONTHS = ["jan", "feb", "mar", "apr", "may", "jun", "jul", "aug", "sep", "oct", "nov", "dec"];
+    month = MONTHS.indexOf(date_list[1].toLowerCase()) + 1;
+    return `${date_list[3]}-${month}-${date_list[2]}`
   }
 
   const team_id_mappings = {
@@ -140,7 +147,7 @@ app.get('/api/getAdvancedMatchupStats/:playerList/:startDate/:endDate/:closest_s
     'OKC': 21,
     'ORL': 22,
     'PHI': 23,
-    'PHX': 24,
+    'PHO': 24,
     'POR': 25,
     'SAC': 26,
     'SAS': 27,
@@ -149,15 +156,14 @@ app.get('/api/getAdvancedMatchupStats/:playerList/:startDate/:endDate/:closest_s
     'WAS': 30
   }
 
-  let team_abbrevs = request.params.playerList.split(',')
-  team_abbrevs.pop()
-  let primary_positions = request.params.primary_positions.split(',')
-  primary_positions.pop()
+  const team_abbrevs = request.params.playerList.split(',')
+  const primary_positions = request.params.primary_positions.split(',')
   const startDate_list = request.params.startDate.split(' ')
   const endDate_list = request.params.endDate.split(' ')
   const startDate = await convertDate(startDate_list)
   const endDate = await convertDate(endDate_list)
   const closest_stat = request.params.closest_stat;
+
   async function requestToBallDontLieAPI(url) {
     let response;
     try {
@@ -170,11 +176,12 @@ app.get('/api/getAdvancedMatchupStats/:playerList/:startDate/:endDate/:closest_s
       });
       return response
     } catch (err) {
-      console.error(`Error: ${err}`);
+      console.error(`Error in requestToBallDontLieAPI(): ${err}`);
       return err;
     }
   }
-  let team_ids = [];
+
+  const team_ids = [];
   for (let i = 0; i < team_abbrevs.length; i++) {
     team_ids.push(team_id_mappings[team_abbrevs[i].toUpperCase()])
   }
@@ -186,7 +193,9 @@ app.get('/api/getAdvancedMatchupStats/:playerList/:startDate/:endDate/:closest_s
 
   const upcoming_games = await requestToBallDontLieAPI(`https://www.balldontlie.io/api/v1/games?seasons[]=2020${team_ids_query}&per_page=81&start_date=${startDate}&end_date=${endDate}`)
   const matchup_ids_total = []
+  const dates_total = []
   let matchup_ids = []
+  let dates = []
   for (let i = 0; i < team_ids.length; i++) {
     for (let j = 0; j < upcoming_games.data.data.length; j++) {
       let game = upcoming_games.data.data[j];
@@ -196,13 +205,16 @@ app.get('/api/getAdvancedMatchupStats/:playerList/:startDate/:endDate/:closest_s
       else {
         let opponent_id = game.home_team.id != team_ids[i] ? game.home_team.id : game.visitor_team.id
         matchup_ids.push(opponent_id)
+        dates.push(game.date.split('T')[0])
       }
     }
     matchup_ids_total.push(matchup_ids)
+    dates_total.push(dates)
     matchup_ids = []
+    dates = []
   }
 
-  async function getStatByPosition(matchup_id, closest_stat, primary_position) {
+  async function getStatByPosition(matchup_id, closest_stat, primary_position, date) {
 
     const stat_mappings = {
       '10': '3PM',
@@ -218,7 +230,7 @@ app.get('/api/getAdvancedMatchupStats/:playerList/:startDate/:endDate/:closest_s
       'OKL': 21,
       'NYK': 20,
       'BRO': 3,
-
+      'PHX':24
     }
 
     const stat_category = stat_mappings[closest_stat]
@@ -243,6 +255,7 @@ app.get('/api/getAdvancedMatchupStats/:playerList/:startDate/:endDate/:closest_s
             const json_obj = JSON.parse(json)
             const stat_against_defense = {
               opponent_team: team_abbrev,
+              date: date,
               stat_category: stat_category,
               primary_position: primary_position,
               stat_total: json_obj[0][stat_category]
@@ -259,8 +272,8 @@ app.get('/api/getAdvancedMatchupStats/:playerList/:startDate/:endDate/:closest_s
   let stat_objects_total = []
   let stat_objects = []
   for (let i = 0; i < matchup_ids_total.length; i++) {
-    for await (let matchup_id of matchup_ids_total[i]) {
-      const stat_obj = await getStatByPosition(matchup_id, closest_stat, primary_positions[i])
+    for (let j = 0; j < matchup_ids_total[i].length; j++) {
+      const stat_obj = await getStatByPosition(matchup_ids_total[i][j], closest_stat, primary_positions[i], dates_total[i][j])
       stat_objects.push(stat_obj)
     }
     stat_objects_total.push(stat_objects)
@@ -305,15 +318,15 @@ async function getTeamKey(league_key) {
   return team_key;
 }
 
-app.get('/api/extractPlayers/:league_keyposition', async (request, res) => {
+app.get('/api/extractPlayers/:league_keyposition/:current_week', async (request, res) => {
 
   const league_key_position = request.params.league_keyposition.split(',');
   const league_key = league_key_position[0];
   const position = league_key_position[1] ? `;position=${league_key_position[1].toUpperCase()}` : '';
-
+  const current_week = request.params.current_week;
   const team_key = await getTeamKey(league_key);
 
-  const matchup_response = await makeAPIrequest(`${BASE_URL}/team/${team_key}/matchups;weeks=13`)
+  const matchup_response = await makeAPIrequest(`${BASE_URL}/team/${team_key}/matchups;weeks=${current_week}`)
   parseMatchup(matchup_response.data)
 
   function Team() {
@@ -382,8 +395,7 @@ app.get('/api/extractPlayers/:league_keyposition', async (request, res) => {
   }
 
   async function getPlayerPickups(data, matchup_parsed, stat_win) {
-    //get the closest stat in the matchup's id
-    const stat_id = data[0][0]
+    const stat_id = data[0][1]     //get the closest stat in the matchup's id
     const topPlayerFromWaiverResponse = await makeAPIrequest(`${BASE_URL}/league/${league_key}/players;status=A;sort=${stat_id};sort_type=lastmonth;count=5${position}`)
     let response_result;
     parseString(topPlayerFromWaiverResponse.data, function (err, result) {

@@ -18,10 +18,10 @@ const LeagueMenu = ({ sendPlayerData, sendAdvancedStats }) => {
     const [isLoading, setLoad] = useState(true)
 
     function createLeagueDropdown() {
-        let leagueoptions = "<option value='0'>Select</option>"
+        let leagueoptions = "<option value='Select'>Select</option>"
         if (leagueList.length > 0) {
             for (let i = 0; i < leagueList.length; i++) {
-                leagueoptions += `<option value=${leagueList[i]}>2020 - ${leagueList[i]}</option>`
+                leagueoptions += `<option value=${leagueList[i].name}>2020 - ${leagueList[i].name}</option>`
             }
             setLoad(false)
             document.getElementById("leagues").innerHTML = leagueoptions;
@@ -33,18 +33,27 @@ const LeagueMenu = ({ sendPlayerData, sendAdvancedStats }) => {
     }
     function handleDropdownSelections() {
         let leagueSelected = document.getElementById("leagues").value;
+        if(leagueSelected === 'Select')
+        {
+            console.error("Please select a league!")
+            sendMatchupData('')
+            sendPlayerData('')
+            sendAdvancedStats('')
+            return
+        }
         let positionSelected = document.getElementById("position").value;
-
+        let CURRENT_WEEK;
         if (endDate < startDate)
             console.log("Please enter a valid date range!")
 
         for (let i = 0; i < leagues.getElementsByTagName("league").length; i++) {
             const league = leagues.getElementsByTagName("league")[i]
-            if (league.getElementsByTagName("name")[0].innerHTML == leagueSelected) {
+            if (league.getElementsByTagName("name")[0].innerHTML === leagueSelected) {            
                 league_key = league.getElementsByTagName("league_key")[0].innerHTML
+                CURRENT_WEEK = league.getElementsByTagName("current_week")[0].innerHTML
             }
         }
-        axios.get(`/api/extractPlayers/${league_key},${positionSelected}`)
+        axios.get(`/api/extractPlayers/${league_key},${positionSelected}/${CURRENT_WEEK}`)
             .then(res => {
                 const sendList = []
                 const sendPlayerList = []
@@ -63,9 +72,13 @@ const LeagueMenu = ({ sendPlayerData, sendAdvancedStats }) => {
                 let teams = ''
                 let primary_positions = ''
                 for (let i = 0; i < res.data.players.length; i++) {
-                    primary_positions += (res.data.players[i].primary_position + ',')
-                    teams += (res.data.players[i].editorial_team_abbr + ',')
+                    primary_positions += (res.data.players[i].primary_position)
+                    teams += (res.data.players[i].editorial_team_abbr)
+                    if(i !== res.data.players.length-1)
+                        teams+=','
+                        primary_positions+=','
                 }
+                console.log(teams)
                 axios.get(`/api/getAdvancedMatchupStats/${teams}/${startDate}/${endDate}/${matchup_differentials[0][0]}/${primary_positions}`)
                     .then(response => {
                         sendAdvancedStats(response.data)
@@ -80,12 +93,17 @@ const LeagueMenu = ({ sendPlayerData, sendAdvancedStats }) => {
                 let xmlDoc = parser.parseFromString(res.data, "text/xml");
                 const root = xmlDoc.documentElement
                 const games = root.getElementsByTagName("game")
-                if (games[games.length - 1].getElementsByTagName("season")[0].innerHTML == 2020) {
+                if (games[games.length - 1].getElementsByTagName("season")[0].innerHTML === '2020') {
                     leagues = games[games.length - 1].getElementsByTagName("leagues")[0]
                     const numLeagues = leagues.getElementsByTagName("league").length;
                     for (let i = 0; i < numLeagues; i++) {
                         const league = leagues.getElementsByTagName("league")[i]
-                        league_list.push(league.getElementsByTagName("name")[0].innerHTML)
+                        const LEAGUE  = {
+                            name: league.getElementsByTagName("name")[0].innerHTML,
+                            current_week:league.getElementsByTagName("current_week")[0].innerHTML,
+                        }
+
+                        league_list.push(LEAGUE)
                     }
                 }
                 setLeagueList(league_list);

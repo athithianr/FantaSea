@@ -55,7 +55,7 @@ const TopPickupGrid = ({ playerData, advancedStats }) => {
         let matchup_data = ''
         for (let i = 0; i < advancedStats.length; i++) {
             for (let j = 0; j < advancedStats[i].length; j++) {
-                matchup_data += `<p style=font-size:15px><span style=font-weight:bolder>Opponent Team: </span> ${advancedStats[i][j].opponent_team}</p><p style=font-size:15px><span style=font-weight:bolder>Stat Category: </span>  ${advancedStats[i][j].stat_category}</p><p style=font-size:15px><span style=font-weight:bolder>Primary Position:  </span> ${advancedStats[i][j].primary_position}</p><p style=font-size:15px><span style=font-weight:bolder>Stat Total: </span>  ${advancedStats[i][j].stat_total}</p>`
+                matchup_data += `<p style=font-size:15px><span style=font-weight:bolder>Opponent Team: </span> ${advancedStats[i][j].opponent_team}</p><p style=font-size:15px><span style=font-weight:bolder>Date: </span> ${advancedStats[i][j].date}</p><p style=font-size:15px><span style=font-weight:bolder>Stat Category: </span>  ${advancedStats[i][j].stat_category}</p><p style=font-size:15px><span style=font-weight:bolder>Primary Position:  </span> ${advancedStats[i][j].primary_position}</p><p style=font-size:15px><span style=font-weight:bolder>Stat Total: </span>  ${advancedStats[i][j].stat_total}</p>`
                 if(j !== advancedStats[i].length-1)
                     matchup_data+='<br></br>'
                 document.getElementById(`matchup_stats${i + 1}`).innerHTML = matchup_data
