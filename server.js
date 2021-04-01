@@ -395,7 +395,7 @@ app.get('/api/extractPlayers/:league_keyposition/:current_week', async (request,
   }
 
   async function getPlayerPickups(data, matchup_parsed, stat_win) {
-    const stat_id = data[0][1]     //get the closest stat in the matchup's id
+    const stat_id = data[0][0]     //get the closest stat in the matchup's id
     const topPlayerFromWaiverResponse = await makeAPIrequest(`${BASE_URL}/league/${league_key}/players;status=A;sort=${stat_id};sort_type=lastmonth;count=5${position}`)
     let response_result;
     parseString(topPlayerFromWaiverResponse.data, function (err, result) {

@@ -41,6 +41,11 @@ const LeagueMenu = ({ sendPlayerData, sendAdvancedStats }) => {
             sendAdvancedStats('')
             return
         }
+        if (endDate < startDate)
+        {
+            console.error("Please enter a valid date range!")
+            return
+        }
         let positionSelected = document.getElementById("position").value;
         let CURRENT_WEEK;
         if (endDate < startDate)
@@ -114,7 +119,7 @@ const LeagueMenu = ({ sendPlayerData, sendAdvancedStats }) => {
     useEffect(() => {
         getLeagueData()
         createLeagueDropdown()
-    }, []); // <-- empty array means 'run once'
+    }, []);
 
     return (
         <ContentLoader
