@@ -2,7 +2,6 @@ import firebase from 'firebase/app'
 import React from 'react'
 import bgimage from '../images/joseph-barrientos-oQl0eVYd_n8-unsplash (1).jpg'
 
-
 const SignIn = () => {
     const signInWithYahoo = () => {
         const provider = new firebase.auth.OAuthProvider('yahoo.com')
@@ -15,16 +14,15 @@ const SignIn = () => {
         provider.addScope('email')
         provider.addScope('openid')
         firebase.auth().signInWithPopup(provider)
-            .then((result) => {
-                /** @type {firebase.auth.OAuthCredential} */
-                // const credential = result.credential
-                // Yahoo OAuth access token and ID token can be retrieved by calling:
-                // var accessToken = credential.accessToken;
-                // var idToken = credential.idToken;
-            })
-            .catch((error) => {
-                // Handle error.
-            });
+        .then((result) => {
+            /** @type {firebase.auth.OAuthCredential} */
+            const credential = result.credential
+            window.localStorage.setItem('token',credential.accessToken);
+        })
+        .catch((error) => {
+            // Handle error.
+        });
+
     }
     return (
         
