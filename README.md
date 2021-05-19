@@ -1,9 +1,6 @@
 <!-- PROJECT LOGO -->
 <br />
 <p align="center">
-  <a href="https://github.com/othneildrew/Best-README-Template">
-    <img src="images/logo.png" alt="Logo" width="80" height="80">
-  </a>
 
   <h3 align="center">FantaSea</h3>
 
@@ -16,8 +13,6 @@
     <a href="https://fantasea.herokuapp.com/">View Demo</a>
   </p>
 </p>
-
-
 
 <!-- TABLE OF CONTENTS -->
 <details open="open">
@@ -33,12 +28,8 @@
   </ol>
 </details>
 
-
-
 <!-- ABOUT THE PROJECT -->
 ## About The Project
-
-[![FantaSea Login Page][product-screenshot]](https://example.com)
 
 Teams in weekly fantasy basketball category leagues are often faced with the dilema of choosing a player to pickup to win their matchup.
 
