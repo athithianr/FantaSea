@@ -31,9 +31,9 @@
 <!-- ABOUT THE PROJECT -->
 ## About The Project
 
-Teams in weekly fantasy basketball category leagues are often faced with the dilema of choosing a player to pickup to win their matchup.
+Teams in weekly fantasy basketball category leagues are often faced with the dilemna of choosing player(s) to pickup in order to win their matchup.
 
-FantaSea provides users with a simple login using their Yahoo email, and provides suggestions on who to pick up based on their matchup.
+FantaSea provides users with an aggregated set of players they should consider based on their matchup. All a user needs to do is sign in through their Yahoo account and have an active Yahoo fantasy basketball league.
 
 
 ### Built With
