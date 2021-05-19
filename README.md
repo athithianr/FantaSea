@@ -1,12 +1,6 @@
 
-![FantaSea_MainPage](https://user-images.githubusercontent.com/46330878/118773168-8c8fde80-b852-11eb-8138-2a29fe553d89.PNG)
-![LeagueSelect_MainPage](https://user-images.githubusercontent.com/46330878/118773173-8d287500-b852-11eb-889b-c28b671789c1.PNG)
-![PlayerGrid](https://user-images.githubusercontent.com/46330878/118773177-8ef23880-b852-11eb-8a9b-2c2079bd0f66.PNG)
-![FantaSea_Homepage](https://user-images.githubusercontent.com/46330878/118773183-90236580-b852-11eb-9308-2b43ac340c65.PNG)
-![FantaSea_Homepage](https://user-images.githubusercontent.com/46330878/118773273-a9c4ad00-b852-11eb-9f38-8217751fff37.PNG)
-![FantaSea_MainPage](https://user-images.githubusercontent.com/46330878/118773308-b47f4200-b852-11eb-8320-b9631b43380b.PNG)
-![LeagueSelect_MainPage](https://user-images.githubusercontent.com/46330878/118773309-b517d880-b852-11eb-93f4-a2039e7699d3.PNG)
-![PlayerGrid](https://user-images.githubusercontent.com/46330878/118773317-b6490580-b852-11eb-9776-03d0cb49a15a.PNG)
+
+
 <!-- PROJECT LOGO -->
 <br />
 <p align="center">
@@ -59,3 +53,8 @@ FantaSea provides users with an aggregated set of players they should consider b
 ## Usage
 
 Here are some screenshots displaying various areas of the application.
+
+![LoginPage](https://user-images.githubusercontent.com/46330878/118773183-90236580-b852-11eb-9308-2b43ac340c65.PNG)
+![MainPage Without League Selection](https://user-images.githubusercontent.com/46330878/118773168-8c8fde80-b852-11eb-8138-2a29fe553d89.PNG)
+![LeagueSelected MainPage](https://user-images.githubusercontent.com/46330878/118773173-8d287500-b852-11eb-889b-c28b671789c1.PNG)
+![PlayerGrid](https://user-images.githubusercontent.com/46330878/118773177-8ef23880-b852-11eb-8a9b-2c2079bd0f66.PNG)
