@@ -1,210 +1,37 @@
+import GridPlayer from './GridPlayer.js'
+import GridPlayerTemp from './GridPlayerTemp.js'
 import playerIcon from '../images/empty_profile_icon.png'
-import {
-    Accordion,
-    AccordionItem,
-    AccordionItemHeading,
-    AccordionItemButton,
-    AccordionItemPanel,
-} from 'react-accessible-accordion';
-import 'react-accessible-accordion/dist/fancy-example.css';
 
 
 const TopPickupGrid = ({ playerData, advancedStats }) => {
+    if (typeof (playerData) === 'object') {
+        const renderedPlayerList = playerData[0].map((player, index) => {
+            const img = 'https' + player.image_url[0].replace(/https.*\/https/, '');
+            return <GridPlayer rank={index} playerImg={img} playerName={player.name[0].full[0]} playerPosition={player.display_position[0]} allPlayerStats={playerData[1].player} allMatchupStats={advancedStats} key={index + Math.random()}/>;
+        });
 
-    const stat_mappings = {
-        '0': 'Total Games Played',
-        '10': 'Threes',
-        '12': 'Points',
-        '15': 'Rebounds',
-        '16': 'Assists',
-        '17': 'Steals',
-        '18': 'Blocks',
-        '19': 'Turnovers'
+        return (
+            <section className="playerGrid">
+                <h2 className="top-player-grid text-center my-1">Top Player Pickups</h2>
+                <div className="player-grid text-center">{renderedPlayerList}</div>
+            </section>
+        );
     }
 
-    function populatePlayerGrid() {
-        const players = playerData[0];
-        let position = "";
-        let img = playerIcon;
-        let name = "";
-        for (let i = 0; i < players.length; i++) {
-            img = 'https' + players[i].image_url[0].replace(/https.*\/https/, '');
-            name = players[i].name[0].full[0];
-            position = players[i].display_position[0];
-            document.getElementById(`img${i + 1}`).src = img;
-            document.getElementById(`name${i + 1}`).innerHTML = name;
-            document.getElementById(`pos${i + 1}`).innerHTML = position;
-        }
-        return;
-    }
-    function populatePlayerStats() {
-        const keys = Object.keys(stat_mappings)
-        let stats = {}
-        for (let i = 0; i < 5; i++) {
-            let games_played = playerData[1].player[i].player_stats[0].stats[0].stat[0].value[0]
-            let player_stats = `<br></br><h3>Average Stats(Last month): </h2><p style=font-size:15px;padding:10px>Total Games Played: ${games_played}</p>`
-            for (let j = 1; j < keys.length; j++) {
-                stats[playerData[1].player[i].player_stats[0].stats[0].stat[keys[j]].stat_id[0]] = (playerData[1].player[i].player_stats[0].stats[0].stat[keys[j]].value[0] / games_played).toFixed(1);
-                player_stats += `<p style=font-size:15px>${stat_mappings[playerData[1].player[i].player_stats[0].stats[0].stat[keys[j]].stat_id[0]]}: ${(playerData[1].player[i].player_stats[0].stats[0].stat[keys[j]].value[0] / games_played).toFixed(1)}</p>`
-            }
-            document.getElementById(`stats${i + 1}`).innerHTML = player_stats;
 
-        }
-    }
-    function populateMatchupStats() {
-        let matchup_data = ''
-        for (let i = 0; i < advancedStats.length; i++) {
-            for (let j = 0; j < advancedStats[i].length; j++) {
-                matchup_data += `<p style=font-size:15px><span style=font-weight:bolder>Opponent Team: </span> ${advancedStats[i][j].opponent_team}</p><p style=font-size:15px><span style=font-weight:bolder>Date: </span> ${advancedStats[i][j].date}</p><p style=font-size:15px><span style=font-weight:bolder>Stat Category: </span>  ${advancedStats[i][j].stat_category}</p><p style=font-size:15px><span style=font-weight:bolder>Primary Position:  </span> ${advancedStats[i][j].primary_position}</p><p style=font-size:15px><span style=font-weight:bolder>Stat Total: </span>  ${advancedStats[i][j].stat_total}</p>`
-                if(j !== advancedStats[i].length-1)
-                    matchup_data+='<br></br>'
-                document.getElementById(`matchup_stats${i + 1}`).innerHTML = matchup_data
-            }
-            matchup_data = ''
-        }
 
+    else {
+        let foo = [1, 2, 3, 4, 5];
+        const renderedPlayerList = foo.map((player, index) => {
+            return <GridPlayerTemp rank={index} playerImg={playerIcon} playerName={''} playerPosition={''} key={index + Math.random()}/>;
+        });
+        return (
+            <section className="playerGrid">
+                <h2 className="top-player-grid text-center my-1">Top Player Pickups</h2>
+                <div className="player-grid text-center">{renderedPlayerList}</div>
+            </section>
+        );
     }
-
-    if (playerData) {
-        populatePlayerGrid()
-        populatePlayerStats()
-    }
-    if (advancedStats) {
-        populateMatchupStats()
-    }
-
-    return (
-        <section className="playerGrid">
-            <h2 className="top-player-grid text-center my-1">Top Player Pickups</h2>
-            <div className="player-grid text-center">
-                <div className="player-card">
-                    <div className="card-header">
-                        <h5 style={{ 'textAlign': 'left', 'float': 'left' }}>#1.</h5>
-                        <h4 id="name1" style={{ 'textAlign': 'center', 'float': 'center' }}></h4>
-                        <h5 id="pos1"></h5>
-                    </div>
-                    <div className="card-body">
-                        <img id="img1" src={playerIcon} alt=""></img>
-                        <div id="stats1" className="text-center uniform-lines"></div>
-                        <Accordion allowZeroExpanded>
-                            <AccordionItem>
-                                <AccordionItemHeading>
-                                    <AccordionItemButton>
-                                        Show Upcoming Matchup Stats
-                                        </AccordionItemButton>
-                                </AccordionItemHeading>
-                                <AccordionItemPanel>
-                                    <p id="matchup_stats1">
-                                        No Matchup Stats Currently Available
-                                        </p>
-                                </AccordionItemPanel>
-                            </AccordionItem>
-                        </Accordion>
-                    </div>
-                </div>
-                <div className="player-card">
-                    <div className="card-header">
-                        <h5 style={{ 'textAlign': 'left', 'float': 'left' }}>#2.</h5>
-                        <h4 id="name2" style={{ 'textAlign': 'center', 'float': 'center' }}></h4>
-                        <h5 id="pos2"></h5>
-                    </div>
-                    <div className="card-body">
-                        <img id="img2" src={playerIcon} alt="" ></img>
-                        <div id="stats2" className="text-center uniform-lines"></div>
-                        <Accordion allowZeroExpanded>
-                            <AccordionItem>
-                                <AccordionItemHeading>
-                                    <AccordionItemButton>
-                                        Show Upcoming Matchup Stats
-                                        </AccordionItemButton>
-                                </AccordionItemHeading>
-                                <AccordionItemPanel>
-                                    <p id="matchup_stats2">
-                                        No Matchup Stats Currently Available
-                                        </p>
-                                </AccordionItemPanel>
-                            </AccordionItem>
-                        </Accordion>
-                    </div>
-                </div>
-                <div className="player-card">
-                    <div className="card-header">
-                        <h5 style={{ 'textAlign': 'left', 'float': 'left' }}>#3.</h5>
-                        <h4 id="name3" style={{ 'textAlign': 'center', 'float': 'center' }}></h4>
-                        <h5 id="pos3"></h5>
-                    </div>
-                    <div className="card-body">
-                        <img id="img3" src={playerIcon} alt="" ></img>
-                        <div id="stats3" className="text-center uniform-lines"></div>
-                        <Accordion allowZeroExpanded>
-                            <AccordionItem>
-                                <AccordionItemHeading>
-                                    <AccordionItemButton>
-                                        Show Upcoming Matchup Stats
-                                        </AccordionItemButton>
-                                </AccordionItemHeading>
-                                <AccordionItemPanel>
-                                    <p id="matchup_stats3">
-                                        No Matchup Stats Currently Available
-                                        </p>
-                                </AccordionItemPanel>
-                            </AccordionItem>
-                        </Accordion>
-                    </div>
-                </div>
-                <div className="player-card">
-                    <div className="card-header">
-                        <h5 style={{ 'textAlign': 'left', 'float': 'left' }}>#4.</h5>
-                        <h4 id="name4" style={{ 'textAlign': 'center', 'float': 'center' }}></h4>
-                        <h5 id="pos4"></h5>
-                    </div>
-                    <div className="card-body">
-                        <img id="img4" src={playerIcon} alt=""></img>
-                        <div id="stats4" className="text-center uniform-lines"></div>
-                        <Accordion allowZeroExpanded>
-                            <AccordionItem>
-                                <AccordionItemHeading>
-                                    <AccordionItemButton>
-                                        Show Upcoming Matchup Stats
-                                        </AccordionItemButton>
-                                </AccordionItemHeading>
-                                <AccordionItemPanel>
-                                    <p id="matchup_stats4">
-                                        No Matchup Stats Currently Available
-                                        </p>
-                                </AccordionItemPanel>
-                            </AccordionItem>
-                        </Accordion>
-                    </div>
-                </div>
-                <div className="player-card">
-                    <div className="card-header">
-                        <h5 style={{ 'textAlign': 'left', 'float': 'left' }}>#5.</h5>
-                        <h4 id="name5" style={{ 'textAlign': 'center', 'float': 'center' }}></h4>
-                        <h5 id="pos5"></h5>
-                    </div>
-                    <div className="card-body">
-                        <img id="img5" src={playerIcon} alt=""></img>
-                        <div id="stats5" className="text-center uniform-lines"></div>
-                        <Accordion allowZeroExpanded>
-                            <AccordionItem>
-                                <AccordionItemHeading>
-                                    <AccordionItemButton>
-                                        Show Upcoming Matchup Stats
-                                        </AccordionItemButton>
-                                </AccordionItemHeading>
-                                <AccordionItemPanel>
-                                    <p id="matchup_stats5">
-                                        No Matchup Stats Currently Available
-                                        </p>
-                                </AccordionItemPanel>
-                            </AccordionItem>
-                        </Accordion>
-                    </div>
-                </div>
-            </div>
-        </section>
-    );
 }
 
 export default TopPickupGrid;

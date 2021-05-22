@@ -11,6 +11,8 @@ const path = require('path');
 require('dotenv').config()
 
 const app = express()
+app.locals.ACCESS_TOKEN;
+
 
 //Global Middleware
 app.use(express.static(path.join(__dirname, "fantasy-streaming-tool", "build")));
@@ -18,6 +20,7 @@ app.use(cors())
 
 const AUTH_HEADER = Buffer.from(`${process.env.CONSUMER_KEY}:${process.env.CONSUMER_SECRET}`).toString(`base64`);
 const BASE_URL = "https://fantasysports.yahooapis.com/fantasy/v2";
+
 
 //Write to external file
 function writeToFile(data, file, flag) {
@@ -61,7 +64,7 @@ async function makeAPIrequest(url) {
       url,
       method: "get",
       headers: {
-        'Authorization': `Bearer ${auth.access_token}`,
+        'Authorization': `Bearer ${app.locals.ACCESS_TOKEN}`,
         "Content-Type": "application/x-www-form-urlencoded",
         "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/72.0.3626.109 Safari/537.36",
       },
@@ -282,8 +285,9 @@ app.get('/api/getAdvancedMatchupStats/:playerList/:startDate/:endDate/:closest_s
   res.status(200).send(stat_objects_total)
 })
 
-app.get('/api/setup', async (request, res) => {
+app.get('/api/setup/:token', async (request, res) => {
   console.log('/api/setup endpoint hit!')
+  request.app.locals.ACCESS_TOKEN = request.params.token;
   let response;
   // Add retries for request to evade network errors
   for (let i = 1; i <= 10; i++) {
@@ -395,7 +399,7 @@ app.get('/api/extractPlayers/:league_keyposition/:current_week', async (request,
   }
 
   async function getPlayerPickups(data, matchup_parsed, stat_win) {
-    const stat_id = data[0][1]     //get the closest stat in the matchup's id
+    const stat_id = data[0][0]     //get the closest stat in the matchup's id
     const topPlayerFromWaiverResponse = await makeAPIrequest(`${BASE_URL}/league/${league_key}/players;status=A;sort=${stat_id};sort_type=lastmonth;count=5${position}`)
     let response_result;
     parseString(topPlayerFromWaiverResponse.data, function (err, result) {

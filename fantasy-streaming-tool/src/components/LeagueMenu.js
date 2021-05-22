@@ -8,7 +8,7 @@ import "react-datepicker/dist/react-datepicker.css";
 const axios = require('axios')
 let leagues;
 let league_key;
-const LeagueMenu = ({ sendPlayerData, sendAdvancedStats }) => {
+const LeagueMenu = ({ sendPlayerData, sendAdvancedStats}) => {
     const [matchupData, sendMatchupData] = useState('')
     var parser = new DOMParser();
     let league_list = [];
@@ -16,7 +16,6 @@ const LeagueMenu = ({ sendPlayerData, sendAdvancedStats }) => {
     const [startDate, setStartDate] = useState(new Date());
     const [endDate, setEndDate] = useState(new Date());
     const [isLoading, setLoad] = useState(true)
-
     function createLeagueDropdown() {
         let leagueoptions = "<option value='Select'>Select</option>"
         if (leagueList.length > 0) {
@@ -39,6 +38,11 @@ const LeagueMenu = ({ sendPlayerData, sendAdvancedStats }) => {
             sendMatchupData('')
             sendPlayerData('')
             sendAdvancedStats('')
+            return
+        }
+        if (endDate < startDate)
+        {
+            console.error("Please enter a valid date range!")
             return
         }
         let positionSelected = document.getElementById("position").value;
@@ -88,7 +92,7 @@ const LeagueMenu = ({ sendPlayerData, sendAdvancedStats }) => {
     }
 
     function getLeagueData() {
-        axios.get('/api/setup')
+        axios.get(`/api/setup/${window.localStorage.getItem('token')}`)
             .then(res => {
                 let xmlDoc = parser.parseFromString(res.data, "text/xml");
                 const root = xmlDoc.documentElement
@@ -114,7 +118,7 @@ const LeagueMenu = ({ sendPlayerData, sendAdvancedStats }) => {
     useEffect(() => {
         getLeagueData()
         createLeagueDropdown()
-    }, []); // <-- empty array means 'run once'
+    }, []);
 
     return (
         <ContentLoader
